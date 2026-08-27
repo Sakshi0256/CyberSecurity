@@ -309,7 +309,7 @@ function App() {
       <main>
         <section
           id="home"
-          className="relative mx-auto flex min-h-screen max-w-7xl items-center px-6 pb-20 pt-32 lg:px-8"
+          className="relative mx-auto flex min-h-[calc(100vh-72px)] max-w-7xl items-center px-4 pb-16 pt-28 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8"
         >
           <div className="grid w-full items-center gap-16 lg:grid-cols-2">
             <div>
@@ -318,13 +318,13 @@ function App() {
                 Cybersecurity Awareness Workshop
               </div>
 
-              <h1 className="max-w-3xl text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+              <h1 className="max-w-3xl text-[2.65rem] font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
                 Stay Smart.
                 <br />
                 <span className="text-cyan-400">Stay Secure.</span>
               </h1>
 
-              <p className="mt-7 max-w-xl text-lg leading-8 text-slate-400">
+              <p className="mt-6 max-w-xl text-base leading-7 text-slate-400 sm:mt-7 sm:text-lg sm:leading-8">
                 Learn how to recognize cyber threats, protect your digital
                 identity and build security habits that actually keep you safe.
               </p>
@@ -369,8 +369,8 @@ function App() {
             <div className="relative mx-auto w-full max-w-lg">
               <div className="absolute inset-10 rounded-full bg-cyan-400/10 blur-[80px]" />
 
-              <div className="relative rounded-[2rem] border border-cyan-400/20 bg-white/[0.025] p-5 shadow-2xl shadow-cyan-500/5 backdrop-blur-xl">
-                <div className="rounded-3xl border border-white/10 bg-[#07111f] p-7">
+              <div className="relative rounded-[1.5rem] border border-cyan-400/20 bg-white/[0.025] p-3 shadow-2xl shadow-cyan-500/5 backdrop-blur-xl sm:rounded-[2rem] sm:p-5">
+                <div className="rounded-2xl border border-white/10 bg-[#07111f] p-4 sm:rounded-3xl sm:p-7">
                   <div className="mb-8 flex items-center justify-between">
                     <div>
                       <p className="text-xs uppercase tracking-widest text-slate-500">
@@ -421,8 +421,8 @@ function App() {
               ["100%", "Practical awareness"],
               ["1", "Interactive quiz"],
             ].map(([number, text]) => (
-              <div key={text} className="px-6 py-10 text-center">
-                <p className="text-3xl font-extrabold text-cyan-400">
+              <div key={text} className="px-3 py-7 text-center sm:px-6 sm:py-10">
+                <p className="text-2xl font-extrabold text-cyan-400 sm:text-3xl">
                   {number}
                 </p>
                 <p className="mt-2 text-xs text-slate-500 sm:text-sm">
