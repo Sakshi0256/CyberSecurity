@@ -4,7 +4,7 @@ import {
   Smartphone, Globe, Database, KeyRound, Award, ChevronDown,
   AlertTriangle, Zap, Play, BookOpen, Phone, ExternalLink, Video,
   Gamepad2, Trophy, Flame, RotateCcw, Coins, Link2, Unlock,
-  Heart, Pause, Crosshair, Rocket, Target,
+  Heart, Pause, Crosshair, Rocket, Target, Rotate3d,
 } from "lucide-react";
 
 // ============================================
@@ -60,9 +60,6 @@ const faqs = [
   { question: "What will I learn?", answer: "Recognize phishing, protect accounts, secure devices, browse safely, and respond to incidents." },
 ];
 
-// ============================================
-// REAL CASES
-// ============================================
 const realCases = [
   { id: "wannacry", year: "2017", title: "WannaCry Ransomware", icon: "🦠", severity: "Critical", color: "red", summary: "Global ransomware attack that hit 200,000+ computers across 150 countries in a single day.", impact: "Hospitals in the UK, telecoms in Spain, and factories worldwide were shut down. Estimated damages: $4 billion.", lesson: "Unpatched systems are a massive risk. The attack exploited a Windows vulnerability that had a patch available 2 months earlier. Always apply security updates promptly.", link: "https://www.europol.europa.eu/wannacry-ransomware", linkLabel: "Read Europol Report" },
   { id: "equifax", year: "2017", title: "Equifax Data Breach", icon: "💳", severity: "Critical", color: "red", summary: "Credit bureau Equifax exposed personal data of 147 million people — one of the largest breaches in history.", impact: "Names, SSNs, birth dates, addresses, and driver's licenses were leaked. Settlement: $700 million+.", lesson: "Even large enterprises fail at basic patching. Equifax knew about the vulnerability for months but didn't fix it.", link: "https://www.ftc.gov/enforcement/refunds/equifax-data-breach-settlement", linkLabel: "FTC Case" },
@@ -76,18 +73,18 @@ const burstConfetti = (x, y) => {
   const colors = ["#00f0ff", "#a855f7", "#fbbf24", "#10b981", "#ef4444"];
   const root = document.getElementById("confetti-root");
   if (!root) return;
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 15; i++) {
     const el = document.createElement("div");
     el.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:8px;height:8px;background:${colors[i % colors.length]};border-radius:${Math.random() > 0.5 ? "50%" : "2px"};pointer-events:none;z-index:9999;`;
     root.appendChild(el);
     const angle = Math.random() * Math.PI * 2;
-    const dist = 60 + Math.random() * 120;
+    const dist = 60 + Math.random() * 100;
     el.animate(
       [
         { transform: "translate(-50%,-50%) scale(1)", opacity: 1 },
         { transform: `translate(${Math.cos(angle) * dist}px,${Math.sin(angle) * dist}px) scale(0)`, opacity: 0 },
       ],
-      { duration: 700, easing: "cubic-bezier(0.1,0.8,0.3,1)" }
+      { duration: 600, easing: "cubic-bezier(0.1,0.8,0.3,1)" }
     ).onfinish = () => el.remove();
   }
 };
@@ -151,7 +148,7 @@ function App() {
 
       {/* NAVBAR */}
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#030712]/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-6 lg:px-8">
           <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 sm:gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 sm:h-10 sm:w-10">
               <Shield className="text-cyan-400" size={20} />
@@ -196,7 +193,7 @@ function App() {
         {/* HERO */}
         <section
           id="home"
-          className="relative isolate mx-auto flex min-h-[calc(100vh-72px)] max-w-7xl items-center overflow-hidden rounded-[2rem] px-4 pb-16 pt-28 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8"
+          className="relative isolate mx-auto flex min-h-[calc(100vh-64px)] max-w-7xl items-center overflow-hidden rounded-[2rem] px-4 pb-16 pt-24 sm:min-h-[calc(100vh-72px)] sm:px-6 sm:pb-20 sm:pt-32 lg:px-8"
         >
           <div className="absolute inset-0 overflow-hidden rounded-[2rem]">
             <div className="absolute inset-0 bg-[#030712]" />
@@ -215,7 +212,7 @@ function App() {
 
           <div className="relative z-10 grid w-full items-center gap-16 lg:grid-cols-2">
             <div>
-              <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-cyan-300 backdrop-blur-sm">
+              <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-cyan-300">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
                 Cyber Crime Games · 6 Games
               </div>
@@ -236,7 +233,7 @@ function App() {
                 </button>
                 <button
                   onClick={() => scrollToSection("topics")}
-                  className="rounded-xl border border-white/20 bg-white/[0.06] px-7 py-4 font-semibold text-white backdrop-blur-md transition hover:bg-white/[0.12]"
+                  className="rounded-xl border border-white/20 bg-white/[0.06] px-7 py-4 font-semibold text-white transition hover:bg-white/[0.12]"
                 >
                   Watch Topics
                 </button>
@@ -258,7 +255,7 @@ function App() {
           </div>
           <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-2 divide-x divide-white/10 lg:grid-cols-4">
             {[["6", "Games"], ["∞", "Replayable"], ["15+", "Quiz Questions"], ["↗", "XP & Streaks"]].map(([n, t]) => (
-              <div key={t} className="px-3 py-7 text-center sm:px-6 sm:py-10">
+              <div key={t} className="px-3 py-6 text-center sm:px-6 sm:py-10">
                 <p className="text-2xl font-extrabold text-cyan-400 sm:text-3xl">{n}</p>
                 <p className="mt-2 text-xs text-slate-500 sm:text-sm">{t}</p>
               </div>
@@ -267,7 +264,7 @@ function App() {
         </section>
 
         {/* ABOUT */}
-        <section id="about" className="relative isolate overflow-hidden py-20 sm:py-28">
+        <section id="about" className="relative isolate overflow-hidden py-16 sm:py-28">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 bg-[#030712]" />
             <img src="/images/about-bg.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.55 }} onError={(e) => { e.target.style.display = "none"; }} />
@@ -293,7 +290,7 @@ function App() {
                 ].map((item) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.title} className="group rounded-2xl border border-white/10 bg-white/[0.025] p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-cyan-400/30 sm:p-6">
+                    <div key={item.title} className="group rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition hover:-translate-y-1 hover:border-cyan-400/30 sm:p-6">
                       <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 sm:mb-5 sm:h-11 sm:w-11">
                         <Icon size={20} className="text-cyan-400" />
                       </div>
@@ -311,7 +308,7 @@ function App() {
         <Arcade xp={xp} setXp={setXp} streak={streak} setStreak={setStreak} showToast={showToast} bestScores={bestScores} updateBest={updateBest} />
 
         {/* TOPICS */}
-        <section id="topics" className="relative isolate overflow-hidden py-20 sm:py-28">
+        <section id="topics" className="relative isolate overflow-hidden py-16 sm:py-28">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 bg-[#030712]" />
             <img src="/images/topic-bg.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.55 }} onError={(e) => { e.target.style.display = "none"; }} />
@@ -327,7 +324,7 @@ function App() {
               {topics.map((topic, index) => {
                 const Icon = topic.icon;
                 return (
-                  <button key={topic.id} onClick={() => openTopic(topic)} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#07111f]/80 p-5 text-left backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-cyan-400/30 sm:p-7">
+                  <button key={topic.id} onClick={() => openTopic(topic)} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#07111f]/80 p-5 text-left transition duration-300 hover:-translate-y-1 hover:border-cyan-400/30 sm:p-7">
                     <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-cyan-400/5 blur-2xl transition group-hover:bg-cyan-400/10" />
                     <div className="relative">
                       <div className="flex items-center justify-between">
@@ -355,7 +352,7 @@ function App() {
         </section>
 
         {/* QUIZ */}
-        <section id="quiz" className="relative isolate overflow-hidden py-20 sm:py-28">
+        <section id="quiz" className="relative isolate overflow-hidden py-16 sm:py-28">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 bg-[#030712]" />
             <img src="/images/quize-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.55 }} onError={(e) => { e.target.style.display = "none"; }} />
@@ -367,7 +364,7 @@ function App() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">Would you spot the threat?</h2>
               <p className="mx-auto mt-5 max-w-xl text-slate-400">5 questions randomly selected from a pool of {quizPool.length}. Each attempt is different!</p>
             </div>
-            <div className="mt-10 rounded-3xl border border-white/10 bg-[#07111f]/80 p-4 shadow-2xl backdrop-blur-md sm:mt-12 sm:p-8 lg:p-10">
+            <div className="mt-10 rounded-3xl border border-white/10 bg-[#07111f]/80 p-4 shadow-2xl sm:mt-12 sm:p-8 lg:p-10">
               {!quizFinished ? (
                 <>
                   <div className="mb-6 flex items-center justify-between sm:mb-8">
@@ -418,7 +415,7 @@ function App() {
         </section>
 
         {/* REAL CASES */}
-        <section id="cases" className="relative isolate overflow-hidden py-20 sm:py-28">
+        <section id="cases" className="relative isolate overflow-hidden py-16 sm:py-28">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 bg-[#030712]" />
             <img src="/images/case-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.55 }} onError={(e) => { e.target.style.display = "none"; }} />
@@ -426,7 +423,7 @@ function App() {
           </div>
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-400/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-300 backdrop-blur-sm">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-400/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-300">
                 <AlertTriangle size={14} /> Real-World Incidents
               </div>
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
@@ -443,7 +440,7 @@ function App() {
                   amber: "border-amber-400/40 bg-amber-400/10 text-amber-300",
                 }[c.color] || "border-white/20 bg-white/5 text-slate-300";
                 return (
-                  <div key={c.id} className="group flex flex-col rounded-2xl border border-white/10 bg-[#07111f]/80 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-red-400/40 sm:p-6">
+                  <div key={c.id} className="group flex flex-col rounded-2xl border border-white/10 bg-[#07111f]/80 p-5 transition hover:-translate-y-1 hover:border-red-400/40 sm:p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-2xl">{c.icon}</div>
                       <div className="flex flex-col items-end gap-1">
@@ -473,7 +470,7 @@ function App() {
         </section>
 
         {/* HELPLINE */}
-        <section id="helpline" className="relative isolate overflow-hidden border-y border-red-500/20 py-20 sm:py-28">
+        <section id="helpline" className="relative isolate overflow-hidden border-y border-red-500/20 py-16 sm:py-28">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 bg-[#030712]" />
             <img src="/images/helpline-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.5 }} onError={(e) => { e.target.style.display = "none"; }} />
@@ -481,7 +478,7 @@ function App() {
           </div>
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-red-400/30 bg-red-400/10 backdrop-blur-sm">
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-red-400/30 bg-red-400/10">
                 <Phone className="text-red-400" size={30} />
               </div>
               <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-red-400">Emergency Cyber Helplines</p>
@@ -489,7 +486,7 @@ function App() {
             </div>
             <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
               {helplines.map((h) => (
-                <div key={h.region} className="rounded-2xl border border-red-400/20 bg-[#07111f]/80 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-red-400/40 sm:p-6">
+                <div key={h.region} className="rounded-2xl border border-red-400/20 bg-[#07111f]/80 p-5 transition hover:-translate-y-1 hover:border-red-400/40 sm:p-6">
                   <p className="text-xs font-semibold uppercase tracking-wider text-red-400">{h.region}</p>
                   <p className="mt-3 text-2xl font-extrabold text-white">{h.number}</p>
                   <p className="mt-3 text-sm leading-6 text-slate-500">{h.description}</p>
@@ -505,7 +502,7 @@ function App() {
         </section>
 
         {/* CTA */}
-        <section className="relative isolate overflow-hidden px-4 py-20 sm:px-6 sm:py-28">
+        <section className="relative isolate overflow-hidden px-4 py-16 sm:px-6 sm:py-28">
           <div
             className="absolute inset-0"
             style={{
@@ -525,7 +522,7 @@ function App() {
           />
 
           <div className="relative z-10">
-            <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-cyan-400/20 bg-[#07111f]/80 p-6 text-center backdrop-blur-md sm:p-12 lg:p-16">
+            <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-cyan-400/20 bg-[#07111f]/80 p-6 text-center sm:p-12 lg:p-16">
               <div className="absolute left-1/2 top-0 h-48 w-48 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[80px]" />
               <div className="relative">
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10">
@@ -613,7 +610,7 @@ function App() {
       )}
 
       {toast && (
-        <div key={toast.id} className={`fixed bottom-4 right-4 z-[200] animate-pop rounded-xl border px-4 py-2.5 text-sm font-bold shadow-2xl backdrop-blur-xl sm:bottom-6 sm:right-6 sm:px-5 sm:py-3 sm:text-base ${toast.type === "success" ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-300"
+        <div key={toast.id} className={`fixed bottom-4 right-4 z-[200] animate-pop rounded-xl border px-4 py-2.5 text-sm font-bold shadow-2xl sm:bottom-6 sm:right-6 sm:px-5 sm:py-3 sm:text-base ${toast.type === "success" ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-300"
           : toast.type === "error" ? "border-red-400/40 bg-red-400/10 text-red-300"
             : "border-amber-400/40 bg-amber-400/10 text-amber-300"
           }`}>{toast.message}</div>
@@ -637,11 +634,35 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
     { id: "blaster", icon: Target, name: "Virus Blaster", desc: "Click falling viruses to destroy them before they reach your server.", color: "blue", tag: "Reflex" },
   ];
 
+  const handleGameStart = (gameId) => {
+    setActiveGame(gameId);
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      const el = document.documentElement;
+      if (el.requestFullscreen) {
+        el.requestFullscreen().catch(() => {});
+      }
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock("landscape").catch(() => {});
+      }
+    }
+  };
+
+  const handleGameClose = () => {
+    setActiveGame(null);
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+    if (screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch {}
+    }
+  };
+
+  const closeFullscreen = () => {
+    handleGameClose();
+  };
+
   return (
-    <section
-      id="games"
-      className="relative isolate border-y border-white/10 py-16 sm:py-28 overflow-hidden"
-    >
+    <section id="games" className="relative isolate overflow-hidden border-y border-white/10 py-16 sm:py-28">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.2),transparent_60%)]" />
         <img
@@ -657,7 +678,7 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
 
       <div className="relative z-10 mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
         <div className="text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-cyan-300 backdrop-blur-sm">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-cyan-300">
             <Gamepad2 size={14} /> Game Zone · 6 Games
           </div>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl xl:text-6xl">
@@ -669,78 +690,130 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
         </div>
 
         <div className="mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-2 sm:mt-10 sm:gap-3">
-          <div className="flex items-center gap-2 rounded-xl border border-amber-400/30 bg-amber-400/10 px-3 py-1.5 text-sm font-bold text-amber-300 backdrop-blur-sm sm:px-4 sm:py-2">
+          <div className="flex items-center gap-2 rounded-xl border border-amber-400/30 bg-amber-400/10 px-3 py-1.5 text-sm font-bold text-amber-300 sm:px-4 sm:py-2">
             <Trophy size={15} /> {xp} XP
           </div>
-          <div className="flex items-center gap-2 rounded-xl border border-orange-400/30 bg-orange-400/10 px-3 py-1.5 text-sm font-bold text-orange-300 backdrop-blur-sm sm:px-4 sm:py-2">
+          <div className="flex items-center gap-2 rounded-xl border border-orange-400/30 bg-orange-400/10 px-3 py-1.5 text-sm font-bold text-orange-300 sm:px-4 sm:py-2">
             <Flame size={15} /> {streak} Streak
           </div>
         </div>
 
-        {!activeGame ? (
-          <div className="mt-8 grid gap-4 sm:mt-14 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {games.map((g) => {
-              const Icon = g.icon;
-              const c = {
-                red: { border: "border-red-400/30 hover:border-red-400/60", bg: "bg-red-400/5", icon: "text-red-400", tag: "bg-red-400/10 text-red-300" },
-                amber: { border: "border-amber-400/30 hover:border-amber-400/60", bg: "bg-amber-400/5", icon: "text-amber-400", tag: "bg-amber-400/10 text-amber-300" },
-                cyan: { border: "border-cyan-400/30 hover:border-cyan-400/60", bg: "bg-cyan-400/5", icon: "text-cyan-400", tag: "bg-cyan-400/10 text-cyan-300" },
-                purple: { border: "border-purple-400/30 hover:border-purple-400/60", bg: "bg-purple-400/5", icon: "text-purple-400", tag: "bg-purple-400/10 text-purple-300" },
-                emerald: { border: "border-emerald-400/30 hover:border-emerald-400/60", bg: "bg-emerald-400/5", icon: "text-emerald-400", tag: "bg-emerald-400/10 text-emerald-300" },
-                blue: { border: "border-blue-400/30 hover:border-blue-400/60", bg: "bg-blue-400/5", icon: "text-blue-400", tag: "bg-blue-400/10 text-blue-300" },
-              }[g.color];
+        <div className="mt-8 grid gap-3 sm:mt-12 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {games.map((g) => {
+            const Icon = g.icon;
+            const c = {
+              red: { border: "border-red-400/30 hover:border-red-400/60", bg: "bg-red-400/5", icon: "text-red-400", tag: "bg-red-400/10 text-red-300" },
+              amber: { border: "border-amber-400/30 hover:border-amber-400/60", bg: "bg-amber-400/5", icon: "text-amber-400", tag: "bg-amber-400/10 text-amber-300" },
+              cyan: { border: "border-cyan-400/30 hover:border-cyan-400/60", bg: "bg-cyan-400/5", icon: "text-cyan-400", tag: "bg-cyan-400/10 text-cyan-300" },
+              purple: { border: "border-purple-400/30 hover:border-purple-400/60", bg: "bg-purple-400/5", icon: "text-purple-400", tag: "bg-purple-400/10 text-purple-300" },
+              emerald: { border: "border-emerald-400/30 hover:border-emerald-400/60", bg: "bg-emerald-400/5", icon: "text-emerald-400", tag: "bg-emerald-400/10 text-emerald-300" },
+              blue: { border: "border-blue-400/30 hover:border-blue-400/60", bg: "bg-blue-400/5", icon: "text-blue-400", tag: "bg-blue-400/10 text-blue-300" },
+            }[g.color];
 
-              return (
-                <button
-                  key={g.id}
-                  onClick={() => setActiveGame(g.id)}
-                  className={`group relative overflow-hidden rounded-2xl border-2 ${c.border} ${c.bg} p-5 text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl backdrop-blur-sm sm:rounded-3xl sm:p-7`}
-                >
-                  <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/5 blur-3xl" />
-                  <div className="relative">
-                    <div className="flex items-start justify-between">
-                      <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] sm:h-14 sm:w-14 ${c.icon}`}>
-                        <Icon size={22} />
-                      </div>
-                      <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest sm:px-3 ${c.tag}`}>{g.tag}</span>
+            return (
+              <button
+                key={g.id}
+                onClick={() => handleGameStart(g.id)}
+                className={`group relative overflow-hidden rounded-2xl border-2 ${c.border} ${c.bg} p-4 text-left transition-all duration-300 hover:-translate-y-1 sm:p-5`}
+              >
+                <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-white/5 blur-3xl" />
+                <div className="relative">
+                  <div className="flex items-start justify-between">
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] sm:h-12 sm:w-12 ${c.icon}`}>
+                      <Icon size={20} />
                     </div>
-                    <h3 className="mt-5 text-lg font-bold text-white sm:mt-6 sm:text-xl">{g.name}</h3>
-                    <p className="mt-2 text-sm leading-6 text-slate-400">{g.desc}</p>
-                    <div className="mt-5 flex items-center justify-between">
-                      <span className="text-xs font-semibold text-slate-500">🏆 Best: {bestScores[g.id] || 0}</span>
-                      <span className="flex items-center gap-1.5 rounded-full bg-cyan-400 px-3 py-1.5 text-xs font-bold text-slate-950 transition group-hover:bg-cyan-300 sm:px-4 sm:py-2">
-                        <Play size={12} /> PLAY
-                      </span>
-                    </div>
+                    <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${c.tag}`}>{g.tag}</span>
                   </div>
-                </button>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="mt-8 sm:mt-14">
-            {activeGame === "link" && <LinkCatcherGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.link} updateBest={(s) => updateBest("link", s)} onExit={() => setActiveGame(null)} />}
-            {activeGame === "money" && <MoneyEscapeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.money} updateBest={(s) => updateBest("money", s)} onExit={() => setActiveGame(null)} />}
-            {activeGame === "crack" && <CrackDefenseGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.crack} updateBest={(s) => updateBest("crack", s)} onExit={() => setActiveGame(null)} />}
-            {activeGame === "space" && <SpaceDefenderGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.space} updateBest={(s) => updateBest("space", s)} onExit={() => setActiveGame(null)} />}
-            {activeGame === "snake" && <SnakeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.snake} updateBest={(s) => updateBest("snake", s)} onExit={() => setActiveGame(null)} />}
-            {activeGame === "blaster" && <VirusBlasterGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.blaster} updateBest={(s) => updateBest("blaster", s)} onExit={() => setActiveGame(null)} />}
-          </div>
-        )}
+                  <h3 className="mt-4 text-base font-bold text-white sm:text-lg">{g.name}</h3>
+                  <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-slate-400">{g.desc}</p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="text-[11px] font-semibold text-slate-500">🏆 Best: {bestScores[g.id] || 0}</span>
+                    <span className="flex items-center gap-1.5 rounded-full bg-cyan-400 px-3 py-1.5 text-xs font-bold text-slate-950 transition group-hover:bg-cyan-300">
+                      <Play size={11} /> PLAY
+                    </span>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
+
+      {/* ===== FULLSCREEN GAME MODAL ===== */}
+      {activeGame && (
+        <div className="fixed inset-0 z-[300] flex flex-col bg-[#030712]">
+          {/* Header */}
+          <div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#0a1424] px-3 py-2.5 sm:px-6 sm:py-4">
+            <h3 className="text-sm font-bold text-white sm:text-xl">
+              {activeGame === "link" && "🔗 Suspicious Link Catcher"}
+              {activeGame === "money" && "💰 Money Escape"}
+              {activeGame === "crack" && "🔓 Password Defense"}
+              {activeGame === "space" && "🚀 Space Defender"}
+              {activeGame === "snake" && "🐍 Cyber Snake"}
+              {activeGame === "blaster" && "🎯 Virus Blaster"}
+            </h3>
+            <button
+              onClick={closeFullscreen}
+              className="rounded-lg border border-white/20 bg-white/5 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-white/10 sm:px-4 sm:py-2 sm:text-sm"
+            >
+              ✕ Close
+            </button>
+          </div>
+
+          {/* Portrait mobile → rotate prompt */}
+          <div className="flex flex-1 flex-col items-center justify-center p-6 text-center md:hidden landscape:hidden">
+            <div className="mb-6 flex items-center justify-center gap-4">
+              <div className="flex h-20 w-12 flex-col items-center justify-between rounded-lg border-2 border-cyan-400 p-1.5">
+                <div className="h-1 w-5 rounded-full bg-cyan-400" />
+                <div className="h-1 w-5 rounded-full bg-cyan-400" />
+                <div className="h-1 w-5 rounded-full bg-cyan-400" />
+              </div>
+              <Rotate3d className="animate-pulse text-cyan-400" size={40} />
+            </div>
+            <h4 className="text-xl font-bold text-white">Rotate your phone</h4>
+            <p className="mt-3 max-w-xs text-sm text-slate-400">
+              Turn your phone sideways (landscape) for the best gaming experience
+            </p>
+            <button
+              onClick={() => {
+                const el = document.documentElement;
+                if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+                if (screen.orientation && screen.orientation.lock) {
+                  screen.orientation.lock("landscape").catch(() => {});
+                }
+              }}
+              className="mt-6 rounded-xl bg-cyan-400 px-6 py-3 text-sm font-bold text-slate-950"
+            >
+              Continue in landscape
+            </button>
+          </div>
+
+          {/* Game area — landscape mobile OR desktop */}
+          <div className="hidden flex-1 overflow-auto landscape:flex md:flex">
+            <div className="flex w-full items-start justify-center p-2 sm:p-4 md:p-6">
+              {activeGame === "link" && <LinkCatcherGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.link} updateBest={(s) => updateBest("link", s)} onExit={closeFullscreen} />}
+              {activeGame === "money" && <MoneyEscapeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.money} updateBest={(s) => updateBest("money", s)} onExit={closeFullscreen} />}
+              {activeGame === "crack" && <CrackDefenseGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.crack} updateBest={(s) => updateBest("crack", s)} onExit={closeFullscreen} />}
+              {activeGame === "space" && <SpaceDefenderGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.space} updateBest={(s) => updateBest("space", s)} onExit={closeFullscreen} />}
+              {activeGame === "snake" && <SnakeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.snake} updateBest={(s) => updateBest("snake", s)} onExit={closeFullscreen} />}
+              {activeGame === "blaster" && <VirusBlasterGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.blaster} updateBest={(s) => updateBest("blaster", s)} onExit={closeFullscreen} />}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
 
 // ============================================
-// SHARED UI — Game Header + HUD
+// SHARED UI
 // ============================================
 function GameShell({ title, onExit, children }) {
   return (
     <div className="mx-auto w-full max-w-4xl">
-      <div className="mb-4 flex items-center justify-between gap-2 sm:mb-6">
-        <h3 className="text-lg font-bold sm:text-2xl">{title}</h3>
-        <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm">← Back</button>
+      <div className="mb-3 flex items-center justify-between gap-2 sm:mb-4">
+        <h3 className="text-base font-bold sm:text-xl">{title}</h3>
+        <button onClick={onExit} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:py-2 sm:text-sm">← Back</button>
       </div>
       {children}
     </div>
@@ -749,11 +822,11 @@ function GameShell({ title, onExit, children }) {
 
 function GameHud({ items }) {
   return (
-    <div className={`mb-3 grid gap-2 sm:mb-4 sm:gap-3 grid-cols-${items.length}`}>
+    <div className={`mb-3 grid gap-2 sm:mb-4 sm:gap-3`} style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
       {items.map((it, i) => (
-        <div key={i} className={`rounded-xl border ${it.color} px-2 py-2 text-center sm:px-4 sm:py-3`}>
+        <div key={i} className={`rounded-xl border ${it.color} px-2 py-1.5 text-center sm:px-4 sm:py-3`}>
           <p className="text-[9px] uppercase tracking-widest sm:text-[10px]">{it.label}</p>
-          <p className="text-base font-extrabold text-white sm:text-xl">{it.value}</p>
+          <p className="text-sm font-extrabold text-white sm:text-xl">{it.value}</p>
         </div>
       ))}
     </div>
@@ -769,8 +842,8 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
 
   useEffect(() => {
     const update = () => {
-      const maxW = Math.min(window.innerWidth - 32, 700);
-      const maxH = Math.min(window.innerHeight * 0.55, 480);
+      const maxW = Math.min(window.innerWidth - 24, 900);
+      const maxH = Math.min(window.innerHeight * 0.7, 480);
       const ratio = 700 / 480;
       let w = maxW, h = w / ratio;
       if (h > maxH) { h = maxH; w = h * ratio; }
@@ -797,7 +870,9 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
   const loopRef = useRef(null);
   const tickRef = useRef(null);
   const areaHRef = useRef(AREA_H);
+  const areaWRef = useRef(AREA_W);
   areaHRef.current = AREA_H;
+  areaWRef.current = AREA_W;
 
   const goodLinks = ["google.com", "github.com", "wikipedia.org", "amazon.in", "linkedin.com"];
   const badLinks = ["bit.ly/win", "free-money.xyz", "insta-verify.me", "kyc-update.tk", "bank-login.co"];
@@ -806,7 +881,7 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
     const isBad = Math.random() < 0.65;
     const text = isBad ? badLinks[Math.floor(Math.random() * badLinks.length)] : goodLinks[Math.floor(Math.random() * goodLinks.length)];
     const id = ++idRef.current;
-    const x = Math.random() * (window.innerWidth - 140) + 20;
+    const x = Math.random() * (areaWRef.current - 120) + 10;
     setItems((prev) => [...prev, { id, x, y: -40, isBad, text, speed: 1.2 + Math.random() * 1.3 }]);
   }, []);
 
@@ -824,7 +899,7 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
         }
         return next;
       });
-    }, 30);
+    }, 33);
     tickRef.current = setInterval(() => {
       setTimeLeft((t) => { if (t <= 1) { setPlaying(false); setGameOver(true); return 0; } return t - 1; });
     }, 1000);
@@ -863,15 +938,15 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
         className={`relative mx-auto overflow-hidden rounded-2xl border-2 transition ${flash === "good" ? "border-emerald-400" : flash === "bad" ? "border-red-400" : "border-white/10"}`}
         style={{ width: AREA_W, height: AREA_H, background: "linear-gradient(to bottom, #07111f, #030712)", maxWidth: "100%" }}
       >
-        <div className="absolute inset-x-0 bottom-0 h-16 border-t border-cyan-400/20 bg-cyan-400/5" />
+        <div className="absolute inset-x-0 bottom-0 h-12 border-t border-cyan-400/20 bg-cyan-400/5" />
         <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-400/60">⬇ Your Inbox</p>
         {items.map((it) => (
-          <button key={it.id} onClick={(e) => clickItem(it, e)} className={`absolute rounded-lg border-2 px-2 py-1 font-mono text-[10px] font-bold shadow-lg transition sm:px-3 sm:py-1.5 sm:text-xs ${it.isBad ? "border-red-400/60 bg-red-500/20 text-red-200" : "border-emerald-400/60 bg-emerald-500/20 text-emerald-200"}`} style={{ left: Math.min(it.x, AREA_W - 100), top: it.y }}>
+          <button key={it.id} onClick={(e) => clickItem(it, e)} className={`absolute rounded-lg border-2 px-2 py-0.5 font-mono text-[9px] font-bold shadow-lg transition sm:px-3 sm:py-1 sm:text-xs ${it.isBad ? "border-red-400/60 bg-red-500/20 text-red-200" : "border-emerald-400/60 bg-emerald-500/20 text-emerald-200"}`} style={{ left: Math.min(it.x, AREA_W - 90), top: it.y }}>
             {it.isBad ? "🚨 " : "✅ "}{it.text}
           </button>
         ))}
         {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm p-3 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 p-3 text-center">
             {gameOver ? (
               <>
                 <p className="text-3xl sm:text-5xl">🎯</p>
@@ -903,8 +978,8 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
 
   useEffect(() => {
     const update = () => {
-      const maxW = Math.min(window.innerWidth - 32, 700);
-      const maxH = Math.min(window.innerHeight * 0.5, 420);
+      const maxW = Math.min(window.innerWidth - 24, 900);
+      const maxH = Math.min(window.innerHeight * 0.65, 420);
       const ratio = 700 / 420;
       let w = maxW, h = w / ratio;
       if (h > maxH) { h = maxH; w = h * ratio; }
@@ -917,8 +992,8 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
 
   const AREA_W = dims.w;
   const AREA_H = dims.h;
-  const PLAYER_SIZE = Math.max(32, Math.round(AREA_W * 0.06));
-  const SCAM_SIZE = Math.max(28, Math.round(AREA_W * 0.055));
+  const PLAYER_SIZE = Math.max(30, Math.round(AREA_W * 0.06));
+  const SCAM_SIZE = Math.max(26, Math.round(AREA_W * 0.055));
 
   const [playing, setPlaying] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -962,10 +1037,15 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
   useEffect(() => {
     if (!playing || paused) return;
     let lastT = performance.now();
+    let lastRender = 0;
     const step = (t) => {
       const dt = Math.min(0.05, (t - lastT) / 1000);
       lastT = t;
-      const speed = 320;
+      const minFrame = window.innerWidth < 768 ? 28 : 16;
+      if (t - lastRender < minFrame) { rafRef.current = requestAnimationFrame(step); return; }
+      lastRender = t;
+
+      const speed = 300;
       const { w, h } = dimsRef.current;
       setPlayer((p) => {
         let nx = p.x, ny = p.y;
@@ -976,12 +1056,12 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
         if (k["arrowdown"] || k["s"]) ny += speed * dt;
         return { x: Math.max(0, Math.min(w - PLAYER_SIZE, nx)), y: Math.max(0, Math.min(h - PLAYER_SIZE, ny)) };
       });
-      if (t - lastSpawnRef.current > Math.max(300, 700 - score * 5)) {
+      if (t - lastSpawnRef.current > Math.max(350, 750 - score * 5)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const x = Math.random() * (w - SCAM_SIZE);
         const labels = ["💀 Scam", "🎣 Phish", "📧 Spam", "💰 Trap", "🔓 Hack"];
-        setScams((s) => [...s, { id, x, y: -SCAM_SIZE, vy: 180 + Math.random() * 120, label: labels[Math.floor(Math.random() * labels.length)] }]);
+        setScams((s) => [...s, { id, x, y: -SCAM_SIZE, vy: 160 + Math.random() * 100, label: labels[Math.floor(Math.random() * labels.length)] }]);
       }
       setScams((prev) => {
         const next = [];
@@ -1012,11 +1092,11 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
 
   return (
     <div className="mx-auto w-full max-w-4xl">
-      <div className="mb-4 flex items-center justify-between gap-2 sm:mb-6">
-        <h3 className="text-lg font-bold sm:text-2xl">💰 Money Escape</h3>
+      <div className="mb-3 flex items-center justify-between gap-2 sm:mb-4">
+        <h3 className="text-base font-bold sm:text-xl">💰 Money Escape</h3>
         <div className="flex gap-2">
-          {playing && <button onClick={() => setPaused((p) => !p)} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm"><Pause size={13} className="inline" /> {paused ? "Resume" : "Pause"}</button>}
-          <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm">← Back</button>
+          {playing && <button onClick={() => setPaused((p) => !p)} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:py-2 sm:text-sm"><Pause size={13} className="inline" /> {paused ? "Resume" : "Pause"}</button>}
+          <button onClick={onExit} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:py-2 sm:text-sm">← Back</button>
         </div>
       </div>
       <GameHud
@@ -1033,17 +1113,17 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
         className={`relative mx-auto overflow-hidden rounded-2xl border-2 transition touch-none ${flash ? "border-red-500" : "border-white/10"}`}
         style={{ width: AREA_W, height: AREA_H, background: "radial-gradient(circle at center, #07111f, #030712)", cursor: playing ? "none" : "default", maxWidth: "100%" }}
       >
-        <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+        <div className="pointer-events-none absolute inset-0 opacity-15" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
         <div className="absolute flex items-center justify-center rounded-full border-2 border-amber-400 bg-gradient-to-br from-amber-300 to-amber-500 shadow-lg shadow-amber-500/50" style={{ width: PLAYER_SIZE, height: PLAYER_SIZE, left: player.x, top: player.y }}>
           <span className="font-extrabold text-amber-900" style={{ fontSize: PLAYER_SIZE * 0.5 }}>₹</span>
         </div>
         {scams.map((s) => (
-          <div key={s.id} className="absolute flex items-center justify-center rounded-lg border-2 border-red-400/60 bg-red-500/20 text-[9px] font-bold text-red-100 shadow-lg shadow-red-500/20 sm:text-[10px]" style={{ width: SCAM_SIZE + 24, height: SCAM_SIZE, left: s.x, top: s.y }}>
+          <div key={s.id} className="absolute flex items-center justify-center rounded-lg border-2 border-red-400/60 bg-red-500/20 text-[9px] font-bold text-red-100 shadow-lg shadow-red-500/20 sm:text-[10px]" style={{ width: SCAM_SIZE + 20, height: SCAM_SIZE, left: s.x, top: s.y }}>
             {s.label}
           </div>
         ))}
         {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/75 backdrop-blur-sm p-4 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/75 p-4 text-center">
             {gameOver ? (
               <>
                 <p className="text-3xl sm:text-5xl">💥</p>
@@ -1072,7 +1152,7 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
 }
 
 // ============================================
-// GAME 3 — PASSWORD DEFENSE (fluid, no changes)
+// GAME 3 — PASSWORD DEFENSE
 // ============================================
 function CrackDefenseGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const [playing, setPlaying] = useState(false);
@@ -1170,21 +1250,21 @@ function CrackDefenseGame({ setXp, setStreak, showToast, best, updateBest, onExi
         {feedback && <p className={`mt-4 animate-pop text-center text-base font-bold sm:text-lg ${feedback.includes("Blocked") ? "text-emerald-400" : "text-red-400"}`}>{feedback}</p>}
         {playing && <button onClick={press} className="mt-5 w-full rounded-2xl border-2 border-cyan-400/50 bg-cyan-400/10 py-4 text-sm font-bold text-cyan-300 transition hover:scale-[1.02] hover:bg-cyan-400/20 active:scale-95 sm:py-6 sm:text-lg">PRESS SPACE (or tap here)</button>}
         {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-6 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 p-6 text-center">
             {gameOver ? (
               <>
-                <p className="text-5xl">🔓</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Hacked!</h4>
-                <p className="mt-2 text-lg text-slate-300">Blocked: <strong className="text-cyan-400">{score}</strong></p>
-                <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Try Again</button>
+                <p className="text-4xl sm:text-5xl">🔓</p>
+                <h4 className="mt-4 text-2xl font-extrabold text-white sm:text-3xl">Hacked!</h4>
+                <p className="mt-2 text-base text-slate-300 sm:text-lg">Blocked: <strong className="text-cyan-400">{score}</strong></p>
+                <p className="mt-1 text-xs text-slate-500 sm:text-sm">Best: {Math.max(bestLocal, score)}</p>
+                <button onClick={start} className="mt-5 flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-6 sm:py-3"><RotateCcw size={15} /> Try Again</button>
               </>
             ) : (
               <>
-                <p className="text-5xl">🔐</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Password Defense</h4>
+                <p className="text-4xl sm:text-5xl">🔐</p>
+                <h4 className="mt-4 text-2xl font-extrabold text-white sm:text-3xl">Password Defense</h4>
                 <p className="mt-3 max-w-md text-sm text-slate-300">A hacker is trying to break in.<br /><strong className="text-cyan-300">Press SPACE</strong> when the marker is in the <strong className="text-emerald-300">green zone</strong>.</p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
+                <button onClick={start} className="mt-5 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-8 sm:py-3"><Play size={15} /> START</button>
               </>
             )}
           </div>
@@ -1203,8 +1283,8 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
 
   useEffect(() => {
     const update = () => {
-      const maxW = Math.min(window.innerWidth - 32, 700);
-      const maxH = Math.min(window.innerHeight * 0.5, 460);
+      const maxW = Math.min(window.innerWidth - 24, 900);
+      const maxH = Math.min(window.innerHeight * 0.65, 460);
       const ratio = 700 / 460;
       let w = maxW, h = w / ratio;
       if (h > maxH) { h = maxH; w = h * ratio; }
@@ -1250,27 +1330,35 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
     setAim({ x, y });
   };
 
-  const shoot = () => {
+  const shoot = (e) => {
     if (!playing) return;
     const { w, h } = dimsRef.current;
+    const rect = containerRef.current.getBoundingClientRect();
+    const tx = e.clientX - rect.left;
+    const ty = e.clientY - rect.top;
+    setAim({ x: tx, y: ty });
     const id = ++idRef.current;
-    setBullets((b) => [...b, { id, x: w / 2, y: h - 40, tx: aim.x, ty: aim.y, progress: 0 }]);
+    setBullets((b) => [...b, { id, x: w / 2, y: h - 40, tx, ty, progress: 0 }]);
   };
 
   useEffect(() => {
     if (!playing) return;
     lastTRef.current = performance.now();
+    let lastRender = 0;
     const step = (t) => {
       const dt = Math.min(0.05, (t - lastTRef.current) / 1000);
       lastTRef.current = t;
+      const minFrame = window.innerWidth < 768 ? 28 : 16;
+      if (t - lastRender < minFrame) { rafRef.current = requestAnimationFrame(step); return; }
+      lastRender = t;
       const { w, h } = dimsRef.current;
 
-      if (t - lastSpawnRef.current > Math.max(400, 1000 - score * 8)) {
+      if (t - lastSpawnRef.current > Math.max(450, 1100 - score * 8)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const icons = ["👾", "🦠", "💀", "🎣", "⚠️"];
         const x = 60 + Math.random() * (w - 120);
-        setEnemies((e) => [...e, { id, x, y: -40, vy: 60 + Math.random() * 60, vx: (Math.random() - 0.5) * 80, icon: icons[Math.floor(Math.random() * icons.length)], points: 10 }]);
+        setEnemies((e) => [...e, { id, x, y: -40, vy: 55 + Math.random() * 55, vx: (Math.random() - 0.5) * 60, icon: icons[Math.floor(Math.random() * icons.length)], points: 10 }]);
       }
 
       setEnemies((prev) => {
@@ -1343,7 +1431,7 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
         style={{ width: AREA_W, height: AREA_H, background: "radial-gradient(ellipse at bottom, #0a1a2e, #030712 60%)", maxWidth: "100%" }}
       >
         <div className="pointer-events-none absolute inset-0">
-          {Array.from({ length: 30 }).map((_, i) => (
+          {Array.from({ length: 15 }).map((_, i) => (
             <div key={i} className="absolute rounded-full bg-white/40" style={{ left: `${(i * 73) % 100}%`, top: `${(i * 47) % 100}%`, width: 1 + (i % 3), height: 1 + (i % 3) }} />
           ))}
         </div>
@@ -1365,7 +1453,7 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
         })}
 
         {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-4 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 p-4 text-center">
             {gameOver ? (
               <>
                 <p className="text-3xl sm:text-5xl">🚀</p>
@@ -1393,7 +1481,7 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
 }
 
 // ============================================
-// GAME 5 — CYBER SNAKE (adaptive cell size)
+// GAME 5 — CYBER SNAKE
 // ============================================
 function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const COLS = 20;
@@ -1532,11 +1620,11 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
 
   return (
     <div className="mx-auto w-full max-w-3xl">
-      <div className="mb-4 flex items-center justify-between gap-2 sm:mb-6">
-        <h3 className="text-lg font-bold sm:text-2xl">🐍 Cyber Snake</h3>
+      <div className="mb-3 flex items-center justify-between gap-2 sm:mb-4">
+        <h3 className="text-base font-bold sm:text-xl">🐍 Cyber Snake</h3>
         <div className="flex gap-2">
-          {playing && <button onClick={() => setPaused((p) => !p)} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm"><Pause size={13} className="inline" /> {paused ? "Resume" : "Pause"}</button>}
-          <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm">← Back</button>
+          {playing && <button onClick={() => setPaused((p) => !p)} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:py-2 sm:text-sm"><Pause size={13} className="inline" /> {paused ? "Resume" : "Pause"}</button>}
+          <button onClick={onExit} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:py-2 sm:text-sm">← Back</button>
         </div>
       </div>
 
@@ -1555,7 +1643,7 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
           className="relative overflow-hidden rounded-2xl border-2 border-white/10 bg-[#030712] touch-none"
           style={{ width: COLS * CELL, height: ROWS * CELL, maxWidth: "100%" }}
         >
-          <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: `${CELL}px ${CELL}px` }} />
+          <div className="pointer-events-none absolute inset-0 opacity-15" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: `${CELL}px ${CELL}px` }} />
 
           <div className={`absolute flex items-center justify-center ${food.type === "data" ? "text-emerald-400" : "text-red-400"}`} style={{ left: food.x * CELL, top: food.y * CELL, width: CELL, height: CELL, fontSize: CELL * 0.7 }}>
             {food.type === "data" ? "📦" : "🦠"}
@@ -1566,7 +1654,7 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
           ))}
 
           {!playing && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-4 text-center">
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 p-4 text-center">
               {gameOver ? (
                 <>
                   <p className="text-4xl sm:text-5xl">🐍</p>
@@ -1605,8 +1693,8 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
 
   useEffect(() => {
     const update = () => {
-      const maxW = Math.min(window.innerWidth - 32, 700);
-      const maxH = Math.min(window.innerHeight * 0.5, 460);
+      const maxW = Math.min(window.innerWidth - 24, 900);
+      const maxH = Math.min(window.innerHeight * 0.65, 460);
       const ratio = 700 / 460;
       let w = maxW, h = w / ratio;
       if (h > maxH) { h = maxH; w = h * ratio; }
@@ -1657,16 +1745,20 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
   useEffect(() => {
     if (!playing) return;
     lastTRef.current = performance.now();
+    let lastRender = 0;
     const step = (t) => {
       const dt = Math.min(0.05, (t - lastTRef.current) / 1000);
       lastTRef.current = t;
+      const minFrame = window.innerWidth < 768 ? 28 : 16;
+      if (t - lastRender < minFrame) { rafRef.current = requestAnimationFrame(step); return; }
+      lastRender = t;
       const { w, h } = dimsRef.current;
 
-      if (t - lastSpawnRef.current > Math.max(250, 600 - score * 3)) {
+      if (t - lastSpawnRef.current > Math.max(300, 650 - score * 3)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const icons = ["🦠", "👾", "💀", "🎣", "⚠️", "🧬"];
-        setViruses((prev) => [...prev, { id, x: 40 + Math.random() * (w - 80), y: -30, vy: 60 + Math.random() * 80, vx: (Math.random() - 0.5) * 40, points: 10, icon: icons[Math.floor(Math.random() * icons.length)], size: 40 + Math.random() * 20 }]);
+        setViruses((prev) => [...prev, { id, x: 40 + Math.random() * (w - 80), y: -30, vy: 55 + Math.random() * 70, vx: (Math.random() - 0.5) * 30, points: 10, icon: icons[Math.floor(Math.random() * icons.length)], size: 36 + Math.random() * 16 }]);
       }
 
       setViruses((prev) => {
@@ -1712,7 +1804,7 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
         className="relative mx-auto overflow-hidden rounded-2xl border-2 border-white/10 cursor-crosshair"
         style={{ width: AREA_W, height: AREA_H, background: "radial-gradient(ellipse at top, #1a0a2e, #030712 60%)", maxWidth: "100%" }}
       >
-        <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(rgba(168,85,247,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+        <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(168,85,247,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
 
         <div className="absolute bottom-0 left-0 right-0 h-10 border-t-2 border-cyan-400/50 bg-gradient-to-t from-cyan-400/20 to-transparent" />
         <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-300">🖥️ Your Server</p>
@@ -1728,7 +1820,7 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
         ))}
 
         {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-4 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 p-4 text-center">
             {gameOver ? (
               <>
                 <p className="text-3xl sm:text-5xl">🎯</p>
