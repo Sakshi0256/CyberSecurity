@@ -254,7 +254,6 @@ function App() {
         <section className="relative isolate overflow-hidden border-y border-white/10">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 bg-[#030712]" />
-            <img src="/images/stats-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.5 }} onError={(e) => { e.target.style.display = "none"; }} />
             <div className="absolute inset-0 bg-gradient-to-r from-[#030712]/70 via-[#030712]/40 to-[#030712]/70" />
           </div>
           <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-2 divide-x divide-white/10 lg:grid-cols-4">
