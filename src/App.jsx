@@ -43,7 +43,7 @@ const quizPool = [
   { question: "Why is it risky to use the same password on multiple sites?", options: ["It's harder to remember", "If one site is breached, all your accounts are at risk", "It makes websites load slower", "It's against the law"], correct: 1 },
 ];
 
-const shuffleArray = (arr) => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const shuffleArray = (arr) => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } return a; };
 const pickRandom = (pool, n) => shuffleArray(pool).slice(0, n);
 
 const helplines = [
@@ -60,92 +60,17 @@ const faqs = [
   { question: "What will I learn?", answer: "Recognize phishing, protect accounts, secure devices, browse safely, and respond to incidents." },
 ];
 
-
 // ============================================
-// REAL CASES — Famous cyber incidents
+// REAL CASES
 // ============================================
 const realCases = [
-  {
-    id: "wannacry",
-    year: "2017",
-    title: "WannaCry Ransomware",
-    icon: "🦠",
-    severity: "Critical",
-    color: "red",
-    summary: "Global ransomware attack that hit 200,000+ computers across 150 countries in a single day.",
-    impact: "Hospitals in the UK, telecoms in Spain, and factories worldwide were shut down. Estimated damages: $4 billion.",
-    lesson: "Unpatched systems are a massive risk. The attack exploited a Windows vulnerability that had a patch available 2 months earlier. Always apply security updates promptly.",
-    link: "https://www.europol.europa.eu/wannacry-ransomware",
-    linkLabel: "Read Europol Report",
-  },
-  {
-    id: "equifax",
-    year: "2017",
-    title: "Equifax Data Breach",
-    icon: "💳",
-    severity: "Critical",
-    color: "red",
-    summary: "Credit bureau Equifax exposed personal data of 147 million people — one of the largest breaches in history.",
-    impact: "Names, SSNs, birth dates, addresses, and driver's licenses were leaked. Settlement: $700 million+.",
-    lesson: "Even large enterprises fail at basic patching. Equifax knew about the vulnerability for months but didn't fix it. Never assume a company protects your data — monitor your own credit.",
-    link: "https://www.ftc.gov/enforcement/refunds/equifax-data-breach-settlement",
-    linkLabel: "FTC Case",
-  },
-  {
-    id: "solarwinds",
-    year: "2020",
-    title: "SolarWinds Supply Chain Attack",
-    icon: "🌐",
-    severity: "Critical",
-    color: "red",
-    summary: "Hackers compromised SolarWinds software updates, infecting 18,000+ organizations including US government agencies.",
-    impact: "State-sponsored attack. Major US departments (Treasury, Commerce, Homeland Security) were breached.",
-    lesson: "Supply chain attacks are sophisticated — you can be hacked through trusted software. Verify updates, use network segmentation, and monitor for unusual activity.",
-    link: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa20-352a",
-    linkLabel: "CISA Advisory",
-  },
-  {
-    id: "colonial",
-    year: "2021",
-    title: "Colonial Pipeline Ransomware",
-    icon: "🛢️",
-    severity: "High",
-    color: "amber",
-    summary: "Ransomware attack shut down the largest US fuel pipeline, causing gas shortages across the East Coast.",
-    impact: "Colonial paid $4.4 million ransom. Fuel prices spiked. Emergency declarations issued in multiple states.",
-    lesson: "Critical infrastructure is a prime target. Multi-factor authentication, network segmentation, and offline backups are essential — especially for operational technology.",
-    link: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa21-131a",
-    linkLabel: "CISA Advisory",
-  },
-  {
-    id: "covid-phishing",
-    year: "2020",
-    title: "COVID-19 Phishing Wave",
-    icon: "🎣",
-    severity: "High",
-    color: "amber",
-    summary: "Scammers exploited pandemic fear with fake vaccine info, stimulus payments, and health alerts.",
-    impact: "Google blocked 18 million COVID-related phishing emails per day. Millions of people clicked fake links.",
-    lesson: "Attackers exploit fear and urgency. During crises, verify information through official government channels only. Never click links in unsolicited emails.",
-    link: "https://www.who.int/news-room/feature-stories/detail/who-warns-of-an-infodemic",
-    linkLabel: "WHO Report",
-  },
-  {
-    id: "aadhaar",
-    year: "2018",
-    title: "Aadhaar Data Leak (India)",
-    icon: "🆔",
-    severity: "Critical",
-    color: "red",
-    summary: "Aadhaar data of 1.1 billion Indian citizens was reportedly accessible through a government portal.",
-    impact: "Massive privacy breach affecting almost every Indian adult. Access was later patched, but questions remained.",
-    lesson: "National ID systems need strict access controls. If your Aadhaar is linked to services, use Aadhaar Virtual ID and lock biometrics where possible.",
-    link: "https://uidai.gov.in/",
-    linkLabel: "UIDAI Official",
-  },
+  { id: "wannacry", year: "2017", title: "WannaCry Ransomware", icon: "🦠", severity: "Critical", color: "red", summary: "Global ransomware attack that hit 200,000+ computers across 150 countries in a single day.", impact: "Hospitals in the UK, telecoms in Spain, and factories worldwide were shut down. Estimated damages: $4 billion.", lesson: "Unpatched systems are a massive risk. The attack exploited a Windows vulnerability that had a patch available 2 months earlier. Always apply security updates promptly.", link: "https://www.europol.europa.eu/wannacry-ransomware", linkLabel: "Read Europol Report" },
+  { id: "equifax", year: "2017", title: "Equifax Data Breach", icon: "💳", severity: "Critical", color: "red", summary: "Credit bureau Equifax exposed personal data of 147 million people — one of the largest breaches in history.", impact: "Names, SSNs, birth dates, addresses, and driver's licenses were leaked. Settlement: $700 million+.", lesson: "Even large enterprises fail at basic patching. Equifax knew about the vulnerability for months but didn't fix it.", link: "https://www.ftc.gov/enforcement/refunds/equifax-data-breach-settlement", linkLabel: "FTC Case" },
+  { id: "solarwinds", year: "2020", title: "SolarWinds Supply Chain Attack", icon: "🌐", severity: "Critical", color: "red", summary: "Hackers compromised SolarWinds software updates, infecting 18,000+ organizations including US government agencies.", impact: "State-sponsored attack. Major US departments were breached.", lesson: "Supply chain attacks are sophisticated. Verify updates, use network segmentation, and monitor for unusual activity.", link: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa20-352a", linkLabel: "CISA Advisory" },
+  { id: "colonial", year: "2021", title: "Colonial Pipeline Ransomware", icon: "🛢️", severity: "High", color: "amber", summary: "Ransomware attack shut down the largest US fuel pipeline, causing gas shortages across the East Coast.", impact: "Colonial paid $4.4 million ransom. Fuel prices spiked.", lesson: "MFA, network segmentation, and offline backups are essential — especially for operational technology.", link: "https://www.cisa.gov/news-events/cybersecurity-advisories/aa21-131a", linkLabel: "CISA Advisory" },
+  { id: "covid-phishing", year: "2020", title: "COVID-19 Phishing Wave", icon: "🎣", severity: "High", color: "amber", summary: "Scammers exploited pandemic fear with fake vaccine info, stimulus payments, and health alerts.", impact: "Google blocked 18 million COVID-related phishing emails per day.", lesson: "During crises, verify information through official government channels only.", link: "https://www.who.int/news-room/feature-stories/detail/who-warns-of-an-infodemic", linkLabel: "WHO Report" },
+  { id: "aadhaar", year: "2018", title: "Aadhaar Data Leak (India)", icon: "🆔", severity: "Critical", color: "red", summary: "Aadhaar data of 1.1 billion Indian citizens was reportedly accessible through a government portal.", impact: "Massive privacy breach affecting almost every Indian adult.", lesson: "Use Aadhaar Virtual ID and lock biometrics where possible.", link: "https://uidai.gov.in/", linkLabel: "UIDAI Official" },
 ];
-
-
 
 const burstConfetti = (x, y) => {
   const colors = ["#00f0ff", "#a855f7", "#fbbf24", "#10b981", "#ef4444"];
@@ -226,19 +151,18 @@ function App() {
 
       {/* NAVBAR */}
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#030712]/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-          <button onClick={() => scrollToSection("home")} className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10">
-              <Shield className="text-cyan-400" size={23} />
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 sm:gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 sm:h-10 sm:w-10">
+              <Shield className="text-cyan-400" size={20} />
             </div>
             <div className="text-left">
-              <div className="text-lg font-bold tracking-tight">Cyber<span className="text-cyan-400">Shield</span></div>
-              <div className="text-[9px] font-medium uppercase tracking-[0.25em] text-slate-500">Security Arcade</div>
+              <div className="text-base font-bold tracking-tight sm:text-lg">Cyber<span className="text-cyan-400">Shield</span></div>
+              <div className="text-[8px] font-medium uppercase tracking-[0.25em] text-slate-500 sm:text-[9px]">Security Games</div>
             </div>
           </button>
-
           <nav className="hidden items-center gap-6 md:flex">
-           {[["home","Home"],["about","About"],["games","Arcade"],["topics","Topics"],["cases","Cases"],["quiz","Quiz"],["helpline","Helpline"]].map(([id,label]) => (
+            {[["home", "Home"], ["about", "About"], ["games", "Games"], ["topics", "Topics"], ["cases", "Cases"], ["quiz", "Quiz"], ["helpline", "Helpline"]].map(([id, label]) => (
               <button key={id} onClick={() => scrollToSection(id)} className="text-sm font-medium text-slate-400 transition hover:text-white">{label}</button>
             ))}
           </nav>
@@ -260,7 +184,7 @@ function App() {
         {menuOpen && (
           <div className="border-t border-white/10 bg-[#030712] px-6 py-6 md:hidden">
             <div className="flex flex-col gap-5">
-             {[["home","Home"],["about","About"],["games","Arcade"],["topics","Topics"],["cases","Cases"],["quiz","Quiz"],["helpline","Helpline"]].map(([id,label]) => (
+              {[["home", "Home"], ["about", "About"], ["games", "Games"], ["topics", "Topics"], ["cases", "Cases"], ["quiz", "Quiz"], ["helpline", "Helpline"]].map(([id, label]) => (
                 <button key={id} onClick={() => scrollToSection(id)} className="text-left text-sm font-medium text-slate-300">{label}</button>
               ))}
             </div>
@@ -271,118 +195,70 @@ function App() {
       <main>
         {/* HERO */}
         <section
-  id="home"
-  className="relative isolate mx-auto flex min-h-[calc(100vh-72px)] max-w-7xl items-center overflow-hidden rounded-[2rem] px-4 pb-16 pt-28 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8"
->
-  {/* ===== BACKGROUND LAYER ===== */}
-  <div className="absolute inset-0 overflow-hidden rounded-[2rem]">
-    {/* Dark base */}
-    <div className="absolute inset-0 bg-[#030712]" />
-
-    {/* Fallback gradient */}
-    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(0,240,255,0.25),transparent_55%),radial-gradient(ellipse_at_bottom_right,rgba(139,92,246,0.25),transparent_55%)]" />
-
-    {/* THE IMAGE — using the exact pattern from Test 3 that WORKED */}
-    <img
-      src="/images/hero-bg.png"
-      alt=""
-      className="absolute inset-0 h-full w-full object-cover"
-      style={{ opacity: 0.7 }}
-    />
-
-    {/* Grid overlay */}
-    <div className="arcade-grid absolute inset-0 opacity-25" />
-
-    {/* Left-to-right dark gradient (only left side darkens for text) */}
-    <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/60 to-transparent" />
-
-    {/* Bottom fade */}
-    <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#030712] to-transparent" />
-  </div>
-
-  {/* ===== CONTENT — must have relative z-10 to sit ABOVE background ===== */}
-  <div className="relative z-10 grid w-full items-center gap-16 lg:grid-cols-2">
-    {/* LEFT: Text content */}
-    <div>
-      <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-cyan-300 backdrop-blur-sm">
-        <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
-        Cyber Crime Arcade · 6 Games
-      </div>
-      <h1 className="max-w-3xl text-[2.65rem] font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
-        Play the Games.<br />
-        <span className="text-cyan-400">Outsmart the Scammers.</span>
-      </h1>
-      <p className="mt-6 max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-        Six real arcade games. Shoot, dodge, race, and defend — learn cybersecurity the fun way.
-      </p>
-      <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-        <button
-          onClick={() => scrollToSection("games")}
-          className="group flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-7 py-4 font-bold text-slate-950 transition hover:bg-cyan-300"
+          id="home"
+          className="relative isolate mx-auto flex min-h-[calc(100vh-72px)] max-w-7xl items-center overflow-hidden rounded-[2rem] px-4 pb-16 pt-28 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8"
         >
-          <Gamepad2 size={18} /> Enter Arcade
-          <ArrowRight size={18} className="transition group-hover:translate-x-1" />
-        </button>
-        <button
-          onClick={() => scrollToSection("topics")}
-          className="rounded-xl border border-white/20 bg-white/[0.06] px-7 py-4 font-semibold text-white backdrop-blur-md transition hover:bg-white/[0.12]"
-        >
-          Watch Topics
-        </button>
-      </div>
-      <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-slate-300">
-        <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-cyan-400" /> 6 Real Games</span>
-        <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-cyan-400" /> Space Shooter</span>
-        <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-cyan-400" /> Cyber Snake</span>
-      </div>
-    </div>
+          <div className="absolute inset-0 overflow-hidden rounded-[2rem]">
+            <div className="absolute inset-0 bg-[#030712]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(0,240,255,0.25),transparent_55%),radial-gradient(ellipse_at_bottom_right,rgba(139,92,246,0.25),transparent_55%)]" />
+            <img
+              src="/images/hero-bg.png"
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ opacity: 0.7 }}
+              onError={(e) => { e.target.style.display = "none"; }}
+            />
+            <div className="arcade-grid absolute inset-0 opacity-25" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/60 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#030712] to-transparent" />
+          </div>
 
-    {/* RIGHT: mini preview card */}
-    <div className="relative mx-auto w-full max-w-md">
-      <div className="absolute inset-10 rounded-full bg-cyan-400/10 blur-[80px]" />
-      <div className="relative rounded-3xl border border-cyan-400/25 bg-[#07111f]/80 p-5 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl sm:p-6">
-        <div className="mb-5 flex items-center justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-slate-500">Live Arcade</p>
-            <p className="mt-1 text-sm font-semibold">6 Games Loaded</p>
-          </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400/10 animate-pulse-ring">
-            <Gamepad2 className="text-cyan-400" size={20} />
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            { icon: Link2, name: "Link Catcher", color: "text-red-400" },
-            { icon: Coins, name: "Money Escape", color: "text-amber-400" },
-            { icon: Unlock, name: "Password Defense", color: "text-cyan-400" },
-            { icon: Rocket, name: "Space Defender", color: "text-purple-400" },
-            { icon: Zap, name: "Cyber Snake", color: "text-emerald-400" },
-            { icon: Target, name: "Virus Blaster", color: "text-blue-400" },
-          ].map((g, i) => {
-            const I = g.icon;
-            return (
-              <div key={i} className="flex items-center gap-2 rounded-lg border border-white/10 bg-[#030712]/70 p-2.5">
-                <div className={`flex h-7 w-7 items-center justify-center rounded-md bg-white/5 ${g.color}`}>
-                  <I size={14} />
-                </div>
-                <p className="text-[10px] font-bold text-white">{g.name}</p>
+          <div className="relative z-10 grid w-full items-center gap-16 lg:grid-cols-2">
+            <div>
+              <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-cyan-300 backdrop-blur-sm">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
+                Cyber Crime Games · 6 Games
               </div>
-            );
-          })}
-        </div>
-        <div className="mt-4 flex items-center justify-between text-xs">
-          <span className="flex items-center gap-1 text-orange-300"><Flame size={12} /> Streak: {streak}</span>
-          <span className="flex items-center gap-1 text-amber-300"><Trophy size={12} /> XP: {xp}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+              <h1 className="max-w-3xl text-[2rem] font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+                Play the Games.<br />
+                <span className="text-cyan-400">Outsmart the Scammers.</span>
+              </h1>
+              <p className="mt-6 max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
+                Six real arcade games. Shoot, dodge, race, and defend — learn cybersecurity the fun way.
+              </p>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <button
+                  onClick={() => scrollToSection("games")}
+                  className="group flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-7 py-4 font-bold text-slate-950 transition hover:bg-cyan-300"
+                >
+                  <Gamepad2 size={18} /> Enter Games
+                  <ArrowRight size={18} className="transition group-hover:translate-x-1" />
+                </button>
+                <button
+                  onClick={() => scrollToSection("topics")}
+                  className="rounded-xl border border-white/20 bg-white/[0.06] px-7 py-4 font-semibold text-white backdrop-blur-md transition hover:bg-white/[0.12]"
+                >
+                  Watch Topics
+                </button>
+              </div>
+              <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-slate-300">
+                <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-cyan-400" /> 6 Real Games</span>
+                <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-cyan-400" /> Space Shooter</span>
+                <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-cyan-400" /> Cyber Snake</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* STATS */}
-        <section className="border-y border-white/10 bg-white/[0.015]">
-          <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-white/10 lg:grid-cols-4">
-            {[["6","Arcade Games"],["∞","Replayable"],["15+","Quiz Questions"],["↗","XP & Streaks"]].map(([n,t]) => (
+        <section className="relative isolate overflow-hidden border-y border-white/10">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-[#030712]" />
+            <img src="/images/stats-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.5 }} onError={(e) => { e.target.style.display = "none"; }} />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#030712]/70 via-[#030712]/40 to-[#030712]/70" />
+          </div>
+          <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-2 divide-x divide-white/10 lg:grid-cols-4">
+            {[["6", "Games"], ["∞", "Replayable"], ["15+", "Quiz Questions"], ["↗", "XP & Streaks"]].map(([n, t]) => (
               <div key={t} className="px-3 py-7 text-center sm:px-6 sm:py-10">
                 <p className="text-2xl font-extrabold text-cyan-400 sm:text-3xl">{n}</p>
                 <p className="mt-2 text-xs text-slate-500 sm:text-sm">{t}</p>
@@ -392,35 +268,42 @@ function App() {
         </section>
 
         {/* ABOUT */}
-        <section id="about" className="mx-auto max-w-7xl px-6 py-28 lg:px-8">
-          <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">Why it matters</p>
-              <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">Cybersecurity isn't only an IT problem.</h2>
-              <p className="mt-6 leading-8 text-slate-400">Every person who uses email, smartphones, computers or the internet plays a role in keeping information secure.</p>
-              <p className="mt-4 leading-8 text-slate-400">Attackers target people through phishing, impersonation, weak passwords and social engineering. The strongest defense starts with awareness.</p>
-              <button onClick={() => scrollToSection("games")} className="mt-8 flex items-center gap-2 font-semibold text-cyan-400">
-                Enter the arcade <ArrowRight size={17} />
-              </button>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                { icon: Lock, title: "Protect Identity", text: "Keep accounts and personal information secure." },
-                { icon: AlertTriangle, title: "Spot Threats", text: "Recognize suspicious activity before it becomes damage." },
-                { icon: Zap, title: "React Quickly", text: "Know what to do when something goes wrong." },
-                { icon: Award, title: "Build Habits", text: "Turn security awareness into everyday behavior." },
-              ].map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.title} className="group rounded-2xl border border-white/10 bg-white/[0.025] p-6 transition hover:-translate-y-1 hover:border-cyan-400/30">
-                    <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10">
-                      <Icon size={21} className="text-cyan-400" />
+        <section id="about" className="relative isolate overflow-hidden py-20 sm:py-28">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-[#030712]" />
+            <img src="/images/about-bg.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.55 }} onError={(e) => { e.target.style.display = "none"; }} />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#030712]/50 via-[#030712]/30 to-[#030712]/80" />
+          </div>
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
+              <div>
+                <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">Why it matters</p>
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">Cybersecurity isn't only an IT problem.</h2>
+                <p className="mt-6 leading-8 text-slate-400">Every person who uses email, smartphones, computers or the internet plays a role in keeping information secure.</p>
+                <p className="mt-4 leading-8 text-slate-400">Attackers target people through phishing, impersonation, weak passwords and social engineering. The strongest defense starts with awareness.</p>
+                <button onClick={() => scrollToSection("games")} className="mt-8 flex items-center gap-2 font-semibold text-cyan-400">
+                  Enter the Games <ArrowRight size={17} />
+                </button>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {[
+                  { icon: Lock, title: "Protect Identity", text: "Keep accounts and personal information secure." },
+                  { icon: AlertTriangle, title: "Spot Threats", text: "Recognize suspicious activity before it becomes damage." },
+                  { icon: Zap, title: "React Quickly", text: "Know what to do when something goes wrong." },
+                  { icon: Award, title: "Build Habits", text: "Turn security awareness into everyday behavior." },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.title} className="group rounded-2xl border border-white/10 bg-white/[0.025] p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-cyan-400/30 sm:p-6">
+                      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 sm:mb-5 sm:h-11 sm:w-11">
+                        <Icon size={20} className="text-cyan-400" />
+                      </div>
+                      <h3 className="font-bold">{item.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-500">{item.text}</p>
                     </div>
-                    <h3 className="font-bold">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-slate-500">{item.text}</p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
@@ -429,29 +312,34 @@ function App() {
         <Arcade xp={xp} setXp={setXp} streak={streak} setStreak={setStreak} showToast={showToast} bestScores={bestScores} updateBest={updateBest} />
 
         {/* TOPICS */}
-        <section id="topics" className="bg-white/[0.015] py-28">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <section id="topics" className="relative isolate overflow-hidden py-20 sm:py-28">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-[#030712]" />
+            <img src="/images/topic-bg.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.55 }} onError={(e) => { e.target.style.display = "none"; }} />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#030712]/50 via-[#030712]/30 to-[#030712]/80" />
+          </div>
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl">
               <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">Workshop Topics</p>
-              <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">Watch. Learn. Then Play.</h2>
-              <p className="mt-5 leading-7 text-slate-400">Each topic includes a video lesson + article. Reinforce what you learn in the arcade.</p>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">Watch. Learn. Then Play.</h2>
+              <p className="mt-5 leading-7 text-slate-400">Each topic includes a video lesson + article. Reinforce what you learn in the games.</p>
             </div>
-            <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
               {topics.map((topic, index) => {
                 const Icon = topic.icon;
                 return (
-                  <button key={topic.id} onClick={() => openTopic(topic)} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#07111f] p-7 text-left transition duration-300 hover:-translate-y-1 hover:border-cyan-400/30">
+                  <button key={topic.id} onClick={() => openTopic(topic)} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#07111f]/80 p-5 text-left backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-cyan-400/30 sm:p-7">
                     <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-cyan-400/5 blur-2xl transition group-hover:bg-cyan-400/10" />
                     <div className="relative">
                       <div className="flex items-center justify-between">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10">
-                          <Icon className="text-cyan-400" size={23} />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 sm:h-12 sm:w-12">
+                          <Icon className="text-cyan-400" size={20} />
                         </div>
                         <span className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">0{index + 1}</span>
                       </div>
-                      <h3 className="mt-7 text-xl font-bold">{topic.title}</h3>
-                      <p className="mt-3 text-sm leading-7 text-slate-500">{topic.description}</p>
-                      <div className="mt-6 flex items-center justify-between">
+                      <h3 className="mt-5 text-lg font-bold sm:mt-7 sm:text-xl">{topic.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-500 sm:mt-3 sm:leading-7">{topic.description}</p>
+                      <div className="mt-4 flex items-center justify-between sm:mt-6">
                         <div className="flex items-center gap-3">
                           <span className="text-xs font-semibold text-cyan-400">{topic.level}</span>
                           <span className="flex items-center gap-1 text-xs text-slate-500"><Video size={12} /> Video</span>
@@ -468,144 +356,141 @@ function App() {
         </section>
 
         {/* QUIZ */}
-        <section id="quiz" className="mx-auto max-w-4xl px-6 py-28 lg:px-8">
-          <div className="text-center">
-            <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">Test Your Awareness</p>
-            <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">Would you spot the threat?</h2>
-            <p className="mx-auto mt-5 max-w-xl text-slate-400">5 questions randomly selected from a pool of {quizPool.length}. Each attempt is different!</p>
+        <section id="quiz" className="relative isolate overflow-hidden py-20 sm:py-28">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-[#030712]" />
+            <img src="/images/quize-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.55 }} onError={(e) => { e.target.style.display = "none"; }} />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#030712]/50 via-[#030712]/30 to-[#030712]/80" />
           </div>
-          <div className="mt-12 rounded-3xl border border-white/10 bg-[#07111f] p-6 shadow-2xl sm:p-10">
-            {!quizFinished ? (
-              <>
-                <div className="mb-8 flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Question {quizIndex + 1} / {quizQuestions.length}</span>
-                  <span className="text-sm font-bold text-cyan-400">Score: {quizScore}</span>
-                </div>
-                <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-white/5">
-                  <div className="h-full bg-cyan-400 transition-all" style={{ width: `${((quizIndex + 1) / quizQuestions.length) * 100}%` }} />
-                </div>
-                <h3 className="text-2xl font-bold leading-9">{currentQuestion.question}</h3>
-                <div className="mt-8 space-y-3">
-                  {currentQuestion.options.map((option, index) => {
-                    const isCorrect = index === currentQuestion.correct;
-                    const isSelected = index === selectedAnswer;
-                    let style = "border-white/10 bg-white/[0.02] hover:border-cyan-400/30 hover:bg-cyan-400/5";
-                    if (quizAnswered && isCorrect) style = "border-emerald-400/40 bg-emerald-400/10 text-emerald-300";
-                    else if (quizAnswered && isSelected) style = "border-red-400/40 bg-red-400/10 text-red-300";
-                    return (
-                      <button key={option} onClick={() => handleQuizAnswer(index)} className={`flex w-full items-center justify-between rounded-xl border p-4 text-left text-sm transition ${style}`}>
-                        <span>{option}</span>
-                        {quizAnswered && isCorrect && <CheckCircle2 size={19} className="text-emerald-400" />}
-                        {quizAnswered && isSelected && !isCorrect && <X size={19} className="text-red-400" />}
-                      </button>
-                    );
-                  })}
-                </div>
-                {quizAnswered && (
-                  <div className="mt-6 flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                    <div>
-                      <p className="font-semibold">{selectedAnswer === currentQuestion.correct ? "Correct answer!" : "Not quite."}</p>
-                      <p className="mt-1 text-sm text-slate-500">{selectedAnswer === currentQuestion.correct ? "+10 XP earned" : "The safer choice is highlighted above."}</p>
-                    </div>
-                    <button onClick={nextQuestion} className="rounded-lg bg-cyan-400 px-5 py-2.5 text-sm font-bold text-slate-950">{quizIndex === quizQuestions.length - 1 ? "See Result" : "Next"}</button>
+          <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">Test Your Awareness</p>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">Would you spot the threat?</h2>
+              <p className="mx-auto mt-5 max-w-xl text-slate-400">5 questions randomly selected from a pool of {quizPool.length}. Each attempt is different!</p>
+            </div>
+            <div className="mt-10 rounded-3xl border border-white/10 bg-[#07111f]/80 p-4 shadow-2xl backdrop-blur-md sm:mt-12 sm:p-8 lg:p-10">
+              {!quizFinished ? (
+                <>
+                  <div className="mb-6 flex items-center justify-between sm:mb-8">
+                    <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Q {quizIndex + 1} / {quizQuestions.length}</span>
+                    <span className="text-sm font-bold text-cyan-400">Score: {quizScore}</span>
                   </div>
-                )}
-              </>
-            ) : (
-              <div className="py-8 text-center">
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cyan-400/10"><Award size={38} className="text-cyan-400" /></div>
-                <p className="mt-7 text-sm font-bold uppercase tracking-widest text-cyan-400">Quiz Complete</p>
-                <h3 className="mt-3 text-4xl font-extrabold">{quizScore} / {quizQuestions.length}</h3>
-                <p className="mx-auto mt-4 max-w-md text-slate-500">{quizScore === quizQuestions.length ? "Excellent. Your security awareness is strong." : "You have the basics. Keep practising in the arcade."}</p>
-                <button onClick={resetQuiz} className="mt-8 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300">Try New Random Questions</button>
-              </div>
-            )}
+                  <div className="mb-6 h-1.5 overflow-hidden rounded-full bg-white/5 sm:mb-8">
+                    <div className="h-full bg-cyan-400 transition-all" style={{ width: `${((quizIndex + 1) / quizQuestions.length) * 100}%` }} />
+                  </div>
+                  <h3 className="text-lg font-bold leading-7 sm:text-2xl sm:leading-9">{currentQuestion.question}</h3>
+                  <div className="mt-6 space-y-3 sm:mt-8">
+                    {currentQuestion.options.map((option, index) => {
+                      const isCorrect = index === currentQuestion.correct;
+                      const isSelected = index === selectedAnswer;
+                      let style = "border-white/10 bg-white/[0.02] hover:border-cyan-400/30 hover:bg-cyan-400/5";
+                      if (quizAnswered && isCorrect) style = "border-emerald-400/40 bg-emerald-400/10 text-emerald-300";
+                      else if (quizAnswered && isSelected) style = "border-red-400/40 bg-red-400/10 text-red-300";
+                      return (
+                        <button key={option} onClick={() => handleQuizAnswer(index)} className={`flex w-full items-center justify-between gap-3 rounded-xl border p-3 text-left text-sm transition sm:p-4 ${style}`}>
+                          <span>{option}</span>
+                          {quizAnswered && isCorrect && <CheckCircle2 size={19} className="shrink-0 text-emerald-400" />}
+                          {quizAnswered && isSelected && !isCorrect && <X size={19} className="shrink-0 text-red-400" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {quizAnswered && (
+                    <div className="mt-6 flex flex-col gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="font-semibold">{selectedAnswer === currentQuestion.correct ? "Correct answer!" : "Not quite."}</p>
+                        <p className="mt-1 text-sm text-slate-500">{selectedAnswer === currentQuestion.correct ? "+10 XP earned" : "The safer choice is highlighted above."}</p>
+                      </div>
+                      <button onClick={nextQuestion} className="rounded-lg bg-cyan-400 px-5 py-2.5 text-sm font-bold text-slate-950">{quizIndex === quizQuestions.length - 1 ? "See Result" : "Next"}</button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="py-8 text-center">
+                  <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cyan-400/10"><Award size={38} className="text-cyan-400" /></div>
+                  <p className="mt-7 text-sm font-bold uppercase tracking-widest text-cyan-400">Quiz Complete</p>
+                  <h3 className="mt-3 text-4xl font-extrabold">{quizScore} / {quizQuestions.length}</h3>
+                  <p className="mx-auto mt-4 max-w-md text-slate-500">{quizScore === quizQuestions.length ? "Excellent. Your security awareness is strong." : "You have the basics. Keep practising in the games."}</p>
+                  <button onClick={resetQuiz} className="mt-8 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300">Try New Random Questions</button>
+                </div>
+              )}
+            </div>
           </div>
         </section>
 
-
         {/* REAL CASES */}
-<section id="cases" className="mx-auto max-w-7xl px-6 py-28 lg:px-8">
-  <div className="text-center">
-    <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-400/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-300">
-      <AlertTriangle size={14} /> Real-World Incidents
-    </div>
-    <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-      Cyber attacks that <span className="text-red-400">made history.</span>
-    </h2>
-    <p className="mx-auto mt-5 max-w-2xl text-slate-400">
-      Real cases. Real damage. Learn from the incidents that shook the world — and see how you can avoid becoming a statistic.
-    </p>
-  </div>
-
-  <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-    {realCases.map((c) => {
-      const sevColor = {
-        red: "border-red-400/40 bg-red-400/10 text-red-300",
-        amber: "border-amber-400/40 bg-amber-400/10 text-amber-300",
-      }[c.color] || "border-white/20 bg-white/5 text-slate-300";
-
-      return (
-        <div
-          key={c.id}
-          className="group flex flex-col rounded-2xl border border-white/10 bg-[#07111f] p-6 transition hover:-translate-y-1 hover:border-red-400/40"
-        >
-          <div className="flex items-start justify-between">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-2xl">
-              {c.icon}
+        <section id="cases" className="relative isolate overflow-hidden py-20 sm:py-28">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-[#030712]" />
+            <img src="/images/case-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.55 }} onError={(e) => { e.target.style.display = "none"; }} />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#030712]/50 via-[#030712]/30 to-[#030712]/80" />
+          </div>
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-400/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-red-300 backdrop-blur-sm">
+                <AlertTriangle size={14} /> Real-World Incidents
+              </div>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+                Cyber attacks that <span className="text-red-400">made history.</span>
+              </h2>
+              <p className="mx-auto mt-5 max-w-2xl text-slate-400">
+                Real cases. Real damage. Learn from the incidents that shook the world.
+              </p>
             </div>
-            <div className="flex flex-col items-end gap-1">
-              <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${sevColor}`}>
-                {c.severity}
-              </span>
-              <span className="text-[10px] font-bold text-slate-500">{c.year}</span>
+            <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {realCases.map((c) => {
+                const sevColor = {
+                  red: "border-red-400/40 bg-red-400/10 text-red-300",
+                  amber: "border-amber-400/40 bg-amber-400/10 text-amber-300",
+                }[c.color] || "border-white/20 bg-white/5 text-slate-300";
+                return (
+                  <div key={c.id} className="group flex flex-col rounded-2xl border border-white/10 bg-[#07111f]/80 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-red-400/40 sm:p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-2xl">{c.icon}</div>
+                      <div className="flex flex-col items-end gap-1">
+                        <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${sevColor}`}>{c.severity}</span>
+                        <span className="text-[10px] font-bold text-slate-500">{c.year}</span>
+                      </div>
+                    </div>
+                    <h3 className="mt-5 text-lg font-bold text-white">{c.title}</h3>
+                    <p className="mt-3 text-sm leading-6 text-slate-400">{c.summary}</p>
+                    <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.02] p-3">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Impact</p>
+                      <p className="mt-1 text-xs leading-5 text-slate-400">{c.impact}</p>
+                    </div>
+                    <div className="mt-3 rounded-xl border border-amber-400/10 bg-amber-400/[0.03] p-3">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-amber-400">💡 Lesson</p>
+                      <p className="mt-1 text-xs leading-5 text-slate-400">{c.lesson}</p>
+                    </div>
+                    <a href={c.link} target="_blank" rel="noopener noreferrer" className="mt-4 flex items-center justify-between rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-2.5 text-xs font-bold text-cyan-300 transition hover:border-cyan-400/40 hover:bg-cyan-400/10">
+                      <span>{c.linkLabel}</span>
+                      <ExternalLink size={13} />
+                    </a>
+                  </div>
+                );
+              })}
             </div>
           </div>
-
-          <h3 className="mt-5 text-lg font-bold text-white">{c.title}</h3>
-
-          <p className="mt-3 text-sm leading-6 text-slate-400">{c.summary}</p>
-
-          <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.02] p-3">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Impact</p>
-            <p className="mt-1 text-xs leading-5 text-slate-400">{c.impact}</p>
-          </div>
-
-          <div className="mt-3 rounded-xl border border-amber-400/10 bg-amber-400/[0.03] p-3">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-400">
-              💡 Lesson
-            </p>
-            <p className="mt-1 text-xs leading-5 text-slate-400">{c.lesson}</p>
-          </div>
-
-          <a
-            href={c.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 flex items-center justify-between rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-2.5 text-xs font-bold text-cyan-300 transition hover:border-cyan-400/40 hover:bg-cyan-400/10"
-          >
-            <span>{c.linkLabel}</span>
-            <ExternalLink size={13} />
-          </a>
-        </div>
-      );
-    })}
-  </div>
-</section>
+        </section>
 
         {/* HELPLINE */}
-        <section id="helpline" className="border-y border-red-500/20 bg-red-500/[0.03] py-28">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <section id="helpline" className="relative isolate overflow-hidden border-y border-red-500/20 py-20 sm:py-28">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 bg-[#030712]" />
+            <img src="/images/helpline-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.5 }} onError={(e) => { e.target.style.display = "none"; }} />
+            <div className="absolute inset-0 bg-gradient-to-b from-red-950/30 via-[#030712]/50 to-[#030712]/85" />
+          </div>
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-red-400/30 bg-red-400/10">
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-red-400/30 bg-red-400/10 backdrop-blur-sm">
                 <Phone className="text-red-400" size={30} />
               </div>
               <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-red-400">Emergency Cyber Helplines</p>
-              <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">Need help? Reach out immediately.</h2>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">Need help? Reach out immediately.</h2>
             </div>
-            <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
               {helplines.map((h) => (
-                <div key={h.region} className="rounded-2xl border border-red-400/20 bg-[#07111f] p-6 transition hover:-translate-y-1 hover:border-red-400/40">
+                <div key={h.region} className="rounded-2xl border border-red-400/20 bg-[#07111f]/80 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-red-400/40 sm:p-6">
                   <p className="text-xs font-semibold uppercase tracking-wider text-red-400">{h.region}</p>
                   <p className="mt-3 text-2xl font-extrabold text-white">{h.number}</p>
                   <p className="mt-3 text-sm leading-6 text-slate-500">{h.description}</p>
@@ -620,46 +505,53 @@ function App() {
           </div>
         </section>
 
-        {/* FAQ */}
-        <section id="faq" className="bg-white/[0.015] py-28">
-          <div className="mx-auto max-w-3xl px-6 lg:px-8">
-            <div className="text-center">
-              <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">FAQ</p>
-              <h2 className="text-4xl font-bold sm:text-5xl">Frequently asked questions</h2>
-            </div>
-            <div className="mt-12 space-y-3">
-              {faqs.map((faq, index) => {
-                const open = faqOpen === index;
-                return (
-                  <div key={faq.question} className="overflow-hidden rounded-2xl border border-white/10 bg-[#07111f]">
-                    <button onClick={() => setFaqOpen(open ? null : index)} className="flex w-full items-center justify-between p-6 text-left">
-                      <span className="font-semibold">{faq.question}</span>
-                      <ChevronDown size={19} className={`shrink-0 text-slate-500 transition ${open ? "rotate-180 text-cyan-400" : ""}`} />
-                    </button>
-                    {open && <div className="border-t border-white/10 px-6 pb-6 pt-5 text-sm leading-7 text-slate-500">{faq.answer}</div>}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
         {/* CTA */}
-        <section className="px-6 py-28">
-          <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-cyan-400/20 bg-cyan-400/[0.05] p-10 text-center sm:p-16">
-            <div className="absolute left-1/2 top-0 h-48 w-48 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[80px]" />
-            <div className="relative">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10"><Shield className="text-cyan-400" /></div>
-              <h2 className="mt-7 text-4xl font-extrabold sm:text-5xl">Your first line of defense<br />is <span className="text-cyan-400">awareness.</span></h2>
-              <p className="mx-auto mt-5 max-w-xl text-slate-400">Don't wait for a security incident to learn how to protect yourself.</p>
-              <button onClick={() => scrollToSection("games")} className="mt-8 rounded-xl bg-cyan-400 px-8 py-4 font-bold text-slate-950 transition hover:bg-cyan-300">Enter the Arcade</button>
+        <section className="relative isolate overflow-hidden px-4 py-20 sm:px-6 sm:py-28">
+          <div
+            className="absolute inset-0"
+            style={{
+              zIndex: 0,
+              backgroundImage: "url(/images/stats-bg.png)",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              zIndex: 1,
+              background:
+                "linear-gradient(to bottom, rgba(3,7,18,0.55), rgba(3,7,18,0.35), rgba(3,7,18,0.75))",
+            }}
+          />
+
+          <div className="relative z-10">
+            <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-cyan-400/20 bg-[#07111f]/80 p-6 text-center backdrop-blur-md sm:p-12 lg:p-16">
+              <div className="absolute left-1/2 top-0 h-48 w-48 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[80px]" />
+              <div className="relative">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10">
+                  <Shield className="text-cyan-400" />
+                </div>
+                <h2 className="mt-6 text-3xl font-extrabold leading-tight sm:mt-7 sm:text-4xl lg:text-5xl">
+                  Your first line of defense<br />is <span className="text-cyan-400">awareness.</span>
+                </h2>
+                <p className="mx-auto mt-5 max-w-xl text-slate-400">
+                  Don't wait for a security incident to learn how to protect yourself.
+                </p>
+                <button
+                  onClick={() => scrollToSection("games")}
+                  className="mt-8 rounded-xl bg-cyan-400 px-8 py-4 font-bold text-slate-950 transition hover:bg-cyan-300"
+                >
+                  Enter the Games
+                </button>
+              </div>
             </div>
           </div>
         </section>
       </main>
 
       <footer className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-10 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-400/10"><Shield size={19} className="text-cyan-400" /></div>
             <div>
@@ -667,10 +559,10 @@ function App() {
               <p className="text-xs text-slate-600">Security Awareness Arcade</p>
             </div>
           </div>
-          <div className="flex flex-wrap gap-5 text-sm text-slate-500">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-500">
             <button onClick={() => scrollToSection("home")}>Home</button>
-            <button onClick={() => scrollToSection("games")}>Arcade</button>
-              <button onClick={() => scrollToSection("cases")}>Cases</button>
+            <button onClick={() => scrollToSection("games")}>Games</button>
+            <button onClick={() => scrollToSection("cases")}>Cases</button>
             <button onClick={() => scrollToSection("topics")}>Topics</button>
             <button onClick={() => scrollToSection("quiz")}>Quiz</button>
           </div>
@@ -680,22 +572,22 @@ function App() {
 
       {/* TOPIC MODAL */}
       {activeTopic && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-sm sm:p-8" onClick={closeTopic}>
+        <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/80 p-3 backdrop-blur-sm sm:p-8" onClick={closeTopic}>
           <div onClick={(e) => e.stopPropagation()} className="relative my-8 w-full max-w-4xl rounded-3xl border border-white/10 bg-[#07111f] shadow-2xl">
-            <div className="sticky top-0 z-10 flex items-start justify-between rounded-t-3xl border-b border-white/10 bg-[#07111f]/95 p-6 backdrop-blur-xl sm:p-8">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10">
-                  {(() => { const Icon = activeTopic.icon; return <Icon className="text-cyan-400" size={24} />; })()}
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 rounded-t-3xl border-b border-white/10 bg-[#07111f]/95 p-5 backdrop-blur-xl sm:p-8">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 sm:h-12 sm:w-12">
+                  {(() => { const Icon = activeTopic.icon; return <Icon className="text-cyan-400" size={22} />; })()}
                 </div>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-cyan-400">{activeTopic.level} • Topic</p>
-                  <h2 className="mt-1 text-2xl font-bold sm:text-3xl">{activeTopic.title}</h2>
+                  <h2 className="mt-1 text-xl font-bold sm:text-3xl">{activeTopic.title}</h2>
                 </div>
               </div>
               <button onClick={closeTopic} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-white"><X size={22} /></button>
             </div>
-            <div className="p-6 sm:p-8">
-              <div className="mb-8">
+            <div className="p-5 sm:p-8">
+              <div className="mb-6 sm:mb-8">
                 <div className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-cyan-400"><Play size={16} /> Video Lesson</div>
                 <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
                   <div className="relative aspect-video w-full">
@@ -708,12 +600,12 @@ function App() {
               </div>
               <div>
                 <div className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-cyan-400"><BookOpen size={16} /> Article</div>
-                <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-8">
                   <p className="mb-4 text-base leading-7 text-slate-300">{activeTopic.description}</p>
                   <div className="whitespace-pre-line text-sm leading-7 text-slate-400">{activeTopic.article}</div>
                 </div>
               </div>
-              <div className="mt-8 flex justify-end">
+              <div className="mt-6 flex justify-end sm:mt-8">
                 <button onClick={closeTopic} className="rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300">Close</button>
               </div>
             </div>
@@ -722,11 +614,10 @@ function App() {
       )}
 
       {toast && (
-        <div key={toast.id} className={`fixed bottom-6 right-6 z-[200] animate-pop rounded-xl border px-5 py-3 font-bold shadow-2xl backdrop-blur-xl ${
-          toast.type === "success" ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-300"
+        <div key={toast.id} className={`fixed bottom-4 right-4 z-[200] animate-pop rounded-xl border px-4 py-2.5 text-sm font-bold shadow-2xl backdrop-blur-xl sm:bottom-6 sm:right-6 sm:px-5 sm:py-3 sm:text-base ${toast.type === "success" ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-300"
           : toast.type === "error" ? "border-red-400/40 bg-red-400/10 text-red-300"
-          : "border-amber-400/40 bg-amber-400/10 text-amber-300"
-        }`}>{toast.message}</div>
+            : "border-amber-400/40 bg-amber-400/10 text-amber-300"
+          }`}>{toast.message}</div>
       )}
     </div>
   );
@@ -750,53 +641,45 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
   return (
     <section
       id="games"
-      className="relative isolate border-y border-white/10 py-28 overflow-hidden"
+      className="relative isolate border-y border-white/10 py-16 sm:py-28 overflow-hidden"
     >
-      {/* ===== ARCADE BACKGROUND ===== */}
       <div className="absolute inset-0 overflow-hidden">
-  {/* Fallback gradient */}
-  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.25),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.2),transparent_60%)]" />
+        <img
+          src="/images/arcade-bg.jpeg"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ opacity: 0.85 }}
+          onError={(e) => { e.target.style.display = "none"; }}
+        />
+        <div className="arcade-grid absolute inset-0 opacity-15" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#030712]/30 via-[#030712]/15 to-[#030712]/65" />
+      </div>
 
-  {/* Image */}
-  <img
-    src="/images/arcade-bg.jpeg"
-    alt=""
-    className="absolute inset-0 h-full w-full object-cover"
-    style={{ opacity: 0.6 }}
-  />
-
-  {/* Grid */}
-  <div className="arcade-grid absolute inset-0 opacity-20" />
-
-  {/* LIGHT gradient — much weaker than before */}
-  <div className="absolute inset-0 bg-gradient-to-b from-[#030712]/40 via-[#030712]/20 to-[#030712]/70" />
-</div>
-
-      {/* ===== ARCADE CONTENT — sits above background ===== */}
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
         <div className="text-center">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-cyan-300 backdrop-blur-sm">
-            <Gamepad2 size={14} /> Arcade Zone · 6 Games
+            <Gamepad2 size={14} /> Game Zone · 6 Games
           </div>
-          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl xl:text-6xl">
             Shoot. Race. <span className="text-cyan-400">Defend.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-slate-400">
-            Six real arcade games — clickers, shooters, and a classic snake. Learn cybersecurity the fun way.
+            Six real games — clickers, shooters, and a classic snake. Learn cybersecurity the fun way.
           </p>
         </div>
 
-        <div className="mx-auto mt-10 flex max-w-md items-center justify-center gap-3">
-          <div className="flex items-center gap-2 rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-2 font-bold text-amber-300 backdrop-blur-sm">
-            <Trophy size={16} /> {xp} XP
+        <div className="mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-2 sm:mt-10 sm:gap-3">
+          <div className="flex items-center gap-2 rounded-xl border border-amber-400/30 bg-amber-400/10 px-3 py-1.5 text-sm font-bold text-amber-300 backdrop-blur-sm sm:px-4 sm:py-2">
+            <Trophy size={15} /> {xp} XP
           </div>
-          <div className="flex items-center gap-2 rounded-xl border border-orange-400/30 bg-orange-400/10 px-4 py-2 font-bold text-orange-300 backdrop-blur-sm">
-            <Flame size={16} /> {streak} Streak
+          <div className="flex items-center gap-2 rounded-xl border border-orange-400/30 bg-orange-400/10 px-3 py-1.5 text-sm font-bold text-orange-300 backdrop-blur-sm sm:px-4 sm:py-2">
+            <Flame size={15} /> {streak} Streak
           </div>
         </div>
 
         {!activeGame ? (
-          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-4 sm:mt-14 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {games.map((g) => {
               const Icon = g.icon;
               const c = {
@@ -812,21 +695,21 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
                 <button
                   key={g.id}
                   onClick={() => setActiveGame(g.id)}
-                  className={`group relative overflow-hidden rounded-3xl border-2 ${c.border} ${c.bg} p-7 text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl backdrop-blur-sm`}
+                  className={`group relative overflow-hidden rounded-2xl border-2 ${c.border} ${c.bg} p-5 text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl backdrop-blur-sm sm:rounded-3xl sm:p-7`}
                 >
                   <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/5 blur-3xl" />
                   <div className="relative">
                     <div className="flex items-start justify-between">
-                      <div className={`flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] ${c.icon}`}>
-                        <Icon size={26} />
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] sm:h-14 sm:w-14 ${c.icon}`}>
+                        <Icon size={22} />
                       </div>
-                      <span className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${c.tag}`}>{g.tag}</span>
+                      <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest sm:px-3 ${c.tag}`}>{g.tag}</span>
                     </div>
-                    <h3 className="mt-6 text-xl font-bold text-white">{g.name}</h3>
+                    <h3 className="mt-5 text-lg font-bold text-white sm:mt-6 sm:text-xl">{g.name}</h3>
                     <p className="mt-2 text-sm leading-6 text-slate-400">{g.desc}</p>
                     <div className="mt-5 flex items-center justify-between">
                       <span className="text-xs font-semibold text-slate-500">🏆 Best: {bestScores[g.id] || 0}</span>
-                      <span className="flex items-center gap-1.5 rounded-full bg-cyan-400 px-4 py-2 text-xs font-bold text-slate-950 transition group-hover:bg-cyan-300">
+                      <span className="flex items-center gap-1.5 rounded-full bg-cyan-400 px-3 py-1.5 text-xs font-bold text-slate-950 transition group-hover:bg-cyan-300 sm:px-4 sm:py-2">
                         <Play size={12} /> PLAY
                       </span>
                     </div>
@@ -836,7 +719,7 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
             })}
           </div>
         ) : (
-          <div className="mt-14">
+          <div className="mt-8 sm:mt-14">
             {activeGame === "link" && <LinkCatcherGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.link} updateBest={(s) => updateBest("link", s)} onExit={() => setActiveGame(null)} />}
             {activeGame === "money" && <MoneyEscapeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.money} updateBest={(s) => updateBest("money", s)} onExit={() => setActiveGame(null)} />}
             {activeGame === "crack" && <CrackDefenseGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.crack} updateBest={(s) => updateBest("crack", s)} onExit={() => setActiveGame(null)} />}
@@ -851,7 +734,35 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
 }
 
 // ============================================
-// KEEP: LINK CATCHER
+// SHARED UI — Game Header + HUD
+// ============================================
+function GameShell({ title, onExit, children }) {
+  return (
+    <div className="mx-auto w-full max-w-4xl">
+      <div className="mb-4 flex items-center justify-between gap-2 sm:mb-6">
+        <h3 className="text-lg font-bold sm:text-2xl">{title}</h3>
+        <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm">← Back</button>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function GameHud({ items }) {
+  return (
+    <div className={`mb-3 grid gap-2 sm:mb-4 sm:gap-3 grid-cols-${items.length}`}>
+      {items.map((it, i) => (
+        <div key={i} className={`rounded-xl border ${it.color} px-2 py-2 text-center sm:px-4 sm:py-3`}>
+          <p className="text-[9px] uppercase tracking-widest sm:text-[10px]">{it.label}</p>
+          <p className="text-base font-extrabold text-white sm:text-xl">{it.value}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ============================================
+// GAME 1 — LINK CATCHER
 // ============================================
 function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const GAME_DURATION = 45;
@@ -923,51 +834,54 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
   const start = () => { setPlaying(true); setGameOver(false); setTimeLeft(GAME_DURATION); setScore(0); setLives(3); setItems([]); };
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-2xl font-bold">🔗 Suspicious Link Catcher</h3>
-        <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white">← Back</button>
+    <GameShell title="🔗 Suspicious Link Catcher" onExit={onExit}>
+      <GameHud
+        items={[
+          { label: "Time", value: `${timeLeft}s`, color: "border-cyan-400/30 bg-cyan-400/10" },
+          { label: "Score", value: score, color: "border-emerald-400/30 bg-emerald-400/10" },
+          { label: "Lives", value: "❤️".repeat(Math.max(0, lives)), color: "border-red-400/30 bg-red-400/10" },
+        ]}
+      />
+      <div className="overflow-x-auto pb-2">
+        <div
+          className={`relative overflow-hidden rounded-2xl border-2 transition ${flash === "good" ? "border-emerald-400" : flash === "bad" ? "border-red-400" : "border-white/10"}`}
+          style={{ width: AREA_W, minWidth: AREA_W, height: AREA_H, background: "linear-gradient(to bottom, #07111f, #030712)" }}
+        >
+          <div className="absolute inset-x-0 bottom-0 h-16 border-t border-cyan-400/20 bg-cyan-400/5" />
+          <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-400/60">⬇ Your Inbox</p>
+          {items.map((it) => (
+            <button key={it.id} onClick={(e) => clickItem(it, e)} className={`absolute rounded-lg border-2 px-3 py-1.5 font-mono text-xs font-bold shadow-lg transition hover:scale-110 ${it.isBad ? "border-red-400/60 bg-red-500/20 text-red-200" : "border-emerald-400/60 bg-emerald-500/20 text-emerald-200"}`} style={{ left: it.x, top: it.y }}>
+              {it.isBad ? "🚨 " : "✅ "}{it.text}
+            </button>
+          ))}
+          {!playing && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm p-4 text-center">
+              {gameOver ? (
+                <>
+                  <p className="text-5xl">🎯</p>
+                  <h4 className="mt-4 text-3xl font-extrabold text-white">Game Over</h4>
+                  <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
+                  <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
+                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
+                </>
+              ) : (
+                <>
+                  <p className="text-5xl">🔗</p>
+                  <h4 className="mt-4 text-3xl font-extrabold text-white">Catch the Bad Links</h4>
+                  <p className="mt-3 max-w-md text-center text-sm text-slate-300">Click <strong className="text-red-300">RED (bad)</strong> links to block them.<br /><strong className="text-emerald-300">DON'T click GREEN (safe)</strong> links!</p>
+                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-      <div className="mb-4 grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-cyan-300">Time</p><p className="text-xl font-extrabold text-white">{timeLeft}s</p></div>
-        <div className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-emerald-300">Score</p><p className="text-xl font-extrabold text-white">{score}</p></div>
-        <div className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-red-300">Lives</p><p className="text-xl font-extrabold text-white">{"❤️".repeat(Math.max(0, lives))}</p></div>
-      </div>
-      <div className={`relative overflow-hidden rounded-2xl border-2 transition ${flash === "good" ? "border-emerald-400" : flash === "bad" ? "border-red-400" : "border-white/10"}`} style={{ height: AREA_H, background: "linear-gradient(to bottom, #07111f, #030712)" }}>
-        <div className="absolute inset-x-0 bottom-0 h-16 border-t border-cyan-400/20 bg-cyan-400/5" />
-        <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-400/60">⬇ Your Inbox</p>
-        {items.map((it) => (
-          <button key={it.id} onClick={(e) => clickItem(it, e)} className={`absolute rounded-lg border-2 px-3 py-1.5 font-mono text-xs font-bold shadow-lg transition hover:scale-110 ${it.isBad ? "border-red-400/60 bg-red-500/20 text-red-200" : "border-emerald-400/60 bg-emerald-500/20 text-emerald-200"}`} style={{ left: it.x, top: it.y }}>
-            {it.isBad ? "🚨 " : "✅ "}{it.text}
-          </button>
-        ))}
-        {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm">
-            {gameOver ? (
-              <>
-                <p className="text-5xl">🎯</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Game Over</h4>
-                <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
-                <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
-              </>
-            ) : (
-              <>
-                <p className="text-5xl">🔗</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Catch the Bad Links</h4>
-                <p className="mt-3 max-w-md text-center text-sm text-slate-300">Click <strong className="text-red-300">RED (bad)</strong> links to block them.<br /><strong className="text-emerald-300">DON'T click GREEN (safe)</strong> links!</p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
+    </GameShell>
   );
 }
 
 // ============================================
-// KEEP: MONEY ESCAPE
+// GAME 2 — MONEY ESCAPE
 // ============================================
 function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const AREA_W = 700;
@@ -992,7 +906,7 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const down = (e) => { keysRef.current[e.key.toLowerCase()] = true; if (["arrowup","arrowdown","arrowleft","arrowright"," "].includes(e.key.toLowerCase())) e.preventDefault(); };
+    const down = (e) => { keysRef.current[e.key.toLowerCase()] = true; if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(e.key.toLowerCase())) e.preventDefault(); };
     const up = (e) => { keysRef.current[e.key.toLowerCase()] = false; };
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
@@ -1053,52 +967,56 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
   const start = () => { setPlaying(true); setGameOver(false); setScore(0); setTimeLeft(40); setScams([]); setPlayer({ x: AREA_W / 2 - PLAYER_SIZE / 2, y: AREA_H - PLAYER_SIZE - 10 }); setFlash(false); lastSpawnRef.current = 0; };
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-2xl font-bold">💰 Money Escape</h3>
+    <div className="mx-auto w-full max-w-4xl">
+      <div className="mb-4 flex items-center justify-between gap-2 sm:mb-6">
+        <h3 className="text-lg font-bold sm:text-2xl">💰 Money Escape</h3>
         <div className="flex gap-2">
-          {playing && <button onClick={() => setPaused((p) => !p)} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white"><Pause size={14} className="inline" /> {paused ? "Resume" : "Pause"}</button>}
-          <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white">← Back</button>
+          {playing && <button onClick={() => setPaused((p) => !p)} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm"><Pause size={13} className="inline" /> {paused ? "Resume" : "Pause"}</button>}
+          <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm">← Back</button>
         </div>
       </div>
-      <div className="mb-4 grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-cyan-300">Time</p><p className="text-xl font-extrabold text-white">{Math.ceil(timeLeft)}s</p></div>
-        <div className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-emerald-300">Dodged</p><p className="text-xl font-extrabold text-white">{score}</p></div>
-        <div className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-amber-300">Best</p><p className="text-xl font-extrabold text-white">{bestLocal}</p></div>
-      </div>
-      <div ref={containerRef} onPointerMove={onPointerMove} onPointerDown={onPointerMove} className={`relative overflow-hidden rounded-2xl border-2 transition touch-none ${flash ? "border-red-500" : "border-white/10"}`} style={{ height: AREA_H, background: "radial-gradient(circle at center, #07111f, #030712)", cursor: playing ? "none" : "default" }}>
-        <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
-        <div className="absolute flex items-center justify-center rounded-full border-2 border-amber-400 bg-gradient-to-br from-amber-300 to-amber-500 shadow-lg shadow-amber-500/50" style={{ width: PLAYER_SIZE, height: PLAYER_SIZE, left: player.x, top: player.y }}><span className="text-xl font-extrabold text-amber-900">₹</span></div>
-        {scams.map((s) => (
-          <div key={s.id} className="absolute flex items-center justify-center rounded-lg border-2 border-red-400/60 bg-red-500/20 text-[10px] font-bold text-red-100 shadow-lg shadow-red-500/20" style={{ width: SCAM_SIZE + 30, height: SCAM_SIZE, left: s.x, top: s.y }}>{s.label}</div>
-        ))}
-        {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/75 backdrop-blur-sm p-6 text-center">
-            {gameOver ? (
-              <>
-                <p className="text-5xl">💥</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">{timeLeft > 0 ? "Hit a Scam!" : "Survived!"}</h4>
-                <p className="mt-2 text-lg text-slate-300">Dodged: <strong className="text-cyan-400">{score}</strong></p>
-                <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
-              </>
-            ) : (
-              <>
-                <p className="text-5xl">💰</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Money Escape</h4>
-                <p className="mt-3 max-w-md text-sm text-slate-300">You're a <strong className="text-amber-300">₹ coin</strong>. Dodge the falling scams.<br /><strong>Desktop:</strong> Arrow keys / WASD<br /><strong>Mobile:</strong> Drag to move</p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
-              </>
-            )}
-          </div>
-        )}
+      <GameHud
+        items={[
+          { label: "Time", value: `${Math.ceil(timeLeft)}s`, color: "border-cyan-400/30 bg-cyan-400/10" },
+          { label: "Dodged", value: score, color: "border-emerald-400/30 bg-emerald-400/10" },
+          { label: "Best", value: bestLocal, color: "border-amber-400/30 bg-amber-400/10" },
+        ]}
+      />
+      <div className="overflow-x-auto pb-2">
+        <div ref={containerRef} onPointerMove={onPointerMove} onPointerDown={onPointerMove} className={`relative overflow-hidden rounded-2xl border-2 transition touch-none ${flash ? "border-red-500" : "border-white/10"}`} style={{ width: AREA_W, minWidth: AREA_W, height: AREA_H, background: "radial-gradient(circle at center, #07111f, #030712)", cursor: playing ? "none" : "default" }}>
+          <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+          <div className="absolute flex items-center justify-center rounded-full border-2 border-amber-400 bg-gradient-to-br from-amber-300 to-amber-500 shadow-lg shadow-amber-500/50" style={{ width: PLAYER_SIZE, height: PLAYER_SIZE, left: player.x, top: player.y }}><span className="text-xl font-extrabold text-amber-900">₹</span></div>
+          {scams.map((s) => (
+            <div key={s.id} className="absolute flex items-center justify-center rounded-lg border-2 border-red-400/60 bg-red-500/20 text-[10px] font-bold text-red-100 shadow-lg shadow-red-500/20" style={{ width: SCAM_SIZE + 30, height: SCAM_SIZE, left: s.x, top: s.y }}>{s.label}</div>
+          ))}
+          {!playing && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/75 backdrop-blur-sm p-6 text-center">
+              {gameOver ? (
+                <>
+                  <p className="text-5xl">💥</p>
+                  <h4 className="mt-4 text-3xl font-extrabold text-white">{timeLeft > 0 ? "Hit a Scam!" : "Survived!"}</h4>
+                  <p className="mt-2 text-lg text-slate-300">Dodged: <strong className="text-cyan-400">{score}</strong></p>
+                  <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
+                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
+                </>
+              ) : (
+                <>
+                  <p className="text-5xl">💰</p>
+                  <h4 className="mt-4 text-3xl font-extrabold text-white">Money Escape</h4>
+                  <p className="mt-3 max-w-md text-sm text-slate-300">You're a <strong className="text-amber-300">₹ coin</strong>. Dodge the falling scams.<br /><strong>Desktop:</strong> Arrow keys / WASD<br /><strong>Mobile:</strong> Drag to move</p>
+                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
 // ============================================
-// KEEP: PASSWORD DEFENSE
+// GAME 3 — PASSWORD DEFENSE (fluid, no changes)
 // ============================================
 function CrackDefenseGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const [playing, setPlaying] = useState(false);
@@ -1173,30 +1091,28 @@ function CrackDefenseGame({ setXp, setStreak, showToast, best, updateBest, onExi
   const start = () => { setPlaying(true); setGameOver(false); setScore(0); setLives(3); setHackProgress(0); setMarkerPos(0); markerRef.current = 0; dirRef.current = 1; hackRef.current = 0; setSafeZone({ start: 35, width: 25 }); };
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-2xl font-bold">🔓 Password Defense</h3>
-        <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white">← Back</button>
-      </div>
-      <div className="mb-4 grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-emerald-300">Blocked</p><p className="text-xl font-extrabold text-white">{score}</p></div>
-        <div className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-red-300">Lives</p><p className="text-xl font-extrabold text-white">{"❤️".repeat(Math.max(0, lives))}</p></div>
-        <div className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-amber-300">Best</p><p className="text-xl font-extrabold text-white">{bestLocal}</p></div>
-      </div>
-      <div className={`relative overflow-hidden rounded-2xl border-2 bg-[#07111f] p-8 transition ${flash === "good" ? "border-emerald-400" : flash === "bad" ? "border-red-400" : "border-white/10"}`}>
+    <GameShell title="🔓 Password Defense" onExit={onExit}>
+      <GameHud
+        items={[
+          { label: "Blocked", value: score, color: "border-emerald-400/30 bg-emerald-400/10" },
+          { label: "Lives", value: "❤️".repeat(Math.max(0, lives)), color: "border-red-400/30 bg-red-400/10" },
+          { label: "Best", value: bestLocal, color: "border-amber-400/30 bg-amber-400/10" },
+        ]}
+      />
+      <div className={`relative overflow-hidden rounded-2xl border-2 bg-[#07111f] p-4 sm:p-6 lg:p-8 transition ${flash === "good" ? "border-emerald-400" : flash === "bad" ? "border-red-400" : "border-white/10"}`}>
         <div className="mb-2 flex justify-between text-xs font-bold"><span className="text-red-400">💀 HACKER</span><span className="text-slate-400">{Math.round(hackProgress)}%</span></div>
-        <div className="h-4 overflow-hidden rounded-full border border-red-400/30 bg-black/40"><div className="h-full bg-gradient-to-r from-red-500 to-red-400 transition-all duration-200" style={{ width: `${hackProgress}%` }} /></div>
-        <div className="mt-8">
-          <div className="mb-2 flex justify-between text-xs font-bold"><span className="text-cyan-400">🛡️ DEFENSE</span><span className="text-slate-400">Hit SPACE inside the green zone</span></div>
-          <div className="relative h-16 overflow-hidden rounded-2xl border-2 border-white/10 bg-black/40">
+        <div className="h-3 overflow-hidden rounded-full border border-red-400/30 bg-black/40 sm:h-4"><div className="h-full bg-gradient-to-r from-red-500 to-red-400 transition-all duration-200" style={{ width: `${hackProgress}%` }} /></div>
+        <div className="mt-6 sm:mt-8">
+          <div className="mb-2 flex flex-wrap justify-between gap-2 text-xs font-bold"><span className="text-cyan-400">🛡️ DEFENSE</span><span className="text-slate-400">Hit SPACE inside the green zone</span></div>
+          <div className="relative h-12 overflow-hidden rounded-2xl border-2 border-white/10 bg-black/40 sm:h-16">
             <div className="absolute inset-y-0 bg-emerald-400/20 border-x-2 border-emerald-400" style={{ left: `${safeZone.start}%`, width: `${safeZone.width}%` }}>
               <div className="absolute inset-0 flex items-center justify-center text-emerald-300 font-bold text-xs">SAFE</div>
             </div>
             <div className="absolute inset-y-0 w-1.5 bg-white shadow-[0_0_20px_rgba(255,255,255,0.9)]" style={{ left: `${markerPos}%` }} />
           </div>
         </div>
-        {feedback && <p className={`mt-4 animate-pop text-center text-lg font-bold ${feedback.includes("Blocked") ? "text-emerald-400" : "text-red-400"}`}>{feedback}</p>}
-        {playing && <button onClick={press} className="mt-6 w-full rounded-2xl border-2 border-cyan-400/50 bg-cyan-400/10 py-6 font-bold text-cyan-300 transition hover:scale-[1.02] hover:bg-cyan-400/20 active:scale-95"><span className="text-lg">PRESS SPACE (or tap here)</span></button>}
+        {feedback && <p className={`mt-4 animate-pop text-center text-base font-bold sm:text-lg ${feedback.includes("Blocked") ? "text-emerald-400" : "text-red-400"}`}>{feedback}</p>}
+        {playing && <button onClick={press} className="mt-5 w-full rounded-2xl border-2 border-cyan-400/50 bg-cyan-400/10 py-4 text-sm font-bold text-cyan-300 transition hover:scale-[1.02] hover:bg-cyan-400/20 active:scale-95 sm:py-6 sm:text-lg">PRESS SPACE (or tap here)</button>}
         {!playing && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-6 text-center">
             {gameOver ? (
@@ -1218,12 +1134,12 @@ function CrackDefenseGame({ setXp, setStreak, showToast, best, updateBest, onExi
           </div>
         )}
       </div>
-    </div>
+    </GameShell>
   );
 }
 
 // ============================================
-// NEW GAME 4 — SPACE DEFENDER (SHOOTER)
+// GAME 4 — SPACE DEFENDER
 // ============================================
 function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const AREA_W = 700;
@@ -1265,7 +1181,6 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
 
   const shoot = () => {
     if (!playing) return;
-    // Bullet travels from playerPos to aim
     const id = ++idRef.current;
     setBullets((b) => [...b, { id, x: playerPos.x, y: playerPos.y, tx: aim.x, ty: aim.y, progress: 0 }]);
   };
@@ -1277,53 +1192,38 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
       const dt = Math.min(0.05, (t - lastTRef.current) / 1000);
       lastTRef.current = t;
 
-      // Spawn enemies
       if (t - lastSpawnRef.current > Math.max(400, 1000 - score * 8)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const icons = ["👾", "🦠", "💀", "🎣", "⚠️"];
         const x = 60 + Math.random() * (AREA_W - 120);
-        setEnemies((e) => [...e, {
-          id, x, y: -40, vy: 60 + Math.random() * 60, vx: (Math.random() - 0.5) * 80,
-          icon: icons[Math.floor(Math.random() * icons.length)], points: 10,
-        }]);
+        setEnemies((e) => [...e, { id, x, y: -40, vy: 60 + Math.random() * 60, vx: (Math.random() - 0.5) * 80, icon: icons[Math.floor(Math.random() * icons.length)], points: 10 }]);
       }
 
-      // Move enemies
       setEnemies((prev) => {
         const next = [];
         let dmg = 0;
         for (const en of prev) {
           const nx = en.x + en.vx * dt;
           const ny = en.y + en.vy * dt;
-          // collision with player
           const dx = nx - playerPos.x;
           const dy = ny - playerPos.y;
-          if (Math.abs(dx) < 25 && Math.abs(dy) < 25) {
-            dmg += 15;
-            continue;
-          }
+          if (Math.abs(dx) < 25 && Math.abs(dy) < 25) { dmg += 15; continue; }
           if (ny > AREA_H + 40) continue;
           next.push({ ...en, x: nx, y: ny });
         }
         if (dmg > 0) {
-          setHealth((h) => {
-            const nh = Math.max(0, h - dmg);
-            if (nh <= 0) { setPlaying(false); setGameOver(true); }
-            return nh;
-          });
+          setHealth((h) => { const nh = Math.max(0, h - dmg); if (nh <= 0) { setPlaying(false); setGameOver(true); } return nh; });
           showToast(`💥 Server hit! -${dmg}%`, "error");
         }
         return next;
       });
 
-      // Move bullets + collision
       setBullets((prev) => {
         const next = [];
         for (const b of prev) {
           const p = b.progress + 4 * dt;
           if (p >= 1) {
-            // reached target — check hits
             let hitCount = 0;
             setEnemies((enemies) => {
               const remaining = [];
@@ -1352,102 +1252,105 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
   useEffect(() => { if (gameOver) { updateBest(score); setBestLocal((b) => Math.max(b, score)); } }, [gameOver]);
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-2xl font-bold">🚀 Space Defender</h3>
-        <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white">← Back</button>
-      </div>
+    <GameShell title="🚀 Space Defender" onExit={onExit}>
+      <GameHud
+        items={[
+          { label: "Time", value: `${Math.ceil(timeLeft)}s`, color: "border-cyan-400/30 bg-cyan-400/10" },
+          { label: "Score", value: score, color: "border-emerald-400/30 bg-emerald-400/10" },
+          { label: "HP", value: `${Math.round(health)}%`, color: "border-red-400/30 bg-red-400/10" },
+          { label: "Best", value: bestLocal, color: "border-amber-400/30 bg-amber-400/10" },
+        ]}
+      />
 
-      <div className="mb-4 grid grid-cols-4 gap-3">
-        <div className="rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-3 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-cyan-300">Time</p><p className="text-lg font-extrabold text-white">{Math.ceil(timeLeft)}s</p></div>
-        <div className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-emerald-300">Score</p><p className="text-lg font-extrabold text-white">{score}</p></div>
-        <div className="rounded-xl border border-red-400/30 bg-red-400/10 px-3 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-red-300">Server HP</p><p className="text-lg font-extrabold text-white">{Math.round(health)}%</p></div>
-        <div className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-3 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-amber-300">Best</p><p className="text-lg font-extrabold text-white">{bestLocal}</p></div>
-      </div>
+      <div className="overflow-x-auto pb-2">
+        <div
+          ref={containerRef}
+          onPointerMove={onPointerMove}
+          onClick={shoot}
+          className={`relative overflow-hidden rounded-2xl border-2 transition touch-none cursor-crosshair ${health < 40 ? "border-red-500" : "border-white/10"}`}
+          style={{ width: AREA_W, minWidth: AREA_W, height: AREA_H, background: "radial-gradient(ellipse at bottom, #0a1a2e, #030712 60%)" }}
+        >
+          <div className="pointer-events-none absolute inset-0">
+            {Array.from({ length: 40 }).map((_, i) => (
+              <div key={i} className="absolute rounded-full bg-white/40" style={{ left: `${(i * 73) % 100}%`, top: `${(i * 47) % 100}%`, width: 1 + (i % 3), height: 1 + (i % 3) }} />
+            ))}
+          </div>
 
-      <div
-        ref={containerRef}
-        onPointerMove={onPointerMove}
-        onClick={shoot}
-        className={`relative overflow-hidden rounded-2xl border-2 transition touch-none cursor-crosshair ${health < 40 ? "border-red-500" : "border-white/10"}`}
-        style={{ height: AREA_H, background: "radial-gradient(ellipse at bottom, #0a1a2e, #030712 60%)" }}
-      >
-        {/* Stars */}
-        <div className="pointer-events-none absolute inset-0">
-          {Array.from({ length: 40 }).map((_, i) => (
-            <div key={i} className="absolute rounded-full bg-white/40" style={{ left: `${(i * 73) % 100}%`, top: `${(i * 47) % 100}%`, width: 1 + (i % 3), height: 1 + (i % 3) }} />
+          <div className="absolute flex h-12 w-12 items-center justify-center rounded-full border-2 border-cyan-400 bg-cyan-400/20 shadow-lg shadow-cyan-500/40" style={{ left: playerPos.x - 24, top: playerPos.y - 24 }}>
+            <Crosshair className="text-cyan-300" size={20} />
+          </div>
+
+          <svg className="pointer-events-none absolute inset-0 h-full w-full">
+            <line x1={playerPos.x} y1={playerPos.y} x2={aim.x} y2={aim.y} stroke="rgba(34,211,238,0.4)" strokeWidth="1" strokeDasharray="4 6" />
+          </svg>
+
+          {enemies.map((en) => (
+            <div key={en.id} className="absolute flex h-12 w-12 items-center justify-center rounded-full border-2 border-red-400/60 bg-red-500/20 text-2xl shadow-lg shadow-red-500/30" style={{ left: en.x - 24, top: en.y - 24 }}>{en.icon}</div>
           ))}
+
+          {bullets.map((b) => {
+            const x = b.x + (b.tx - b.x) * b.progress;
+            const y = b.y + (b.ty - b.y) * b.progress;
+            return <div key={b.id} className="pointer-events-none absolute h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,1)]" style={{ left: x - 4, top: y - 4 }} />;
+          })}
+
+          {playing && (
+            <div className="pointer-events-none absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-cyan-300/70" style={{ left: crosshairPos.x, top: crosshairPos.y }}>
+              <div className="absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300" />
+            </div>
+          )}
+
+          {!playing && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-6 text-center">
+              {gameOver ? (
+                <>
+                  <p className="text-5xl">🚀</p>
+                  <h4 className="mt-4 text-3xl font-extrabold text-white">{health > 0 ? "Mission Complete!" : "Server Down!"}</h4>
+                  <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
+                  <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
+                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
+                </>
+              ) : (
+                <>
+                  <p className="text-5xl">🚀</p>
+                  <h4 className="mt-4 text-3xl font-extrabold text-white">Space Defender</h4>
+                  <p className="mt-3 max-w-md text-sm text-slate-300">
+                    You are the <strong className="text-cyan-300">server turret</strong>. Hacker bots 👾🦠💀 are invading.<br />
+                    <strong>Move your mouse</strong> to aim, <strong>click</strong> to shoot.
+                  </p>
+                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
+                </>
+              )}
+            </div>
+          )}
         </div>
-
-        {/* Player turret */}
-        <div className="absolute flex h-12 w-12 items-center justify-center rounded-full border-2 border-cyan-400 bg-cyan-400/20 shadow-lg shadow-cyan-500/40" style={{ left: playerPos.x - 24, top: playerPos.y - 24 }}>
-          <Crosshair className="text-cyan-300" size={20} />
-        </div>
-
-        {/* Aim line */}
-        <svg className="pointer-events-none absolute inset-0 h-full w-full">
-          <line x1={playerPos.x} y1={playerPos.y} x2={aim.x} y2={aim.y} stroke="rgba(34,211,238,0.4)" strokeWidth="1" strokeDasharray="4 6" />
-        </svg>
-
-        {/* Enemies */}
-        {enemies.map((en) => (
-          <div key={en.id} className="absolute flex h-12 w-12 items-center justify-center rounded-full border-2 border-red-400/60 bg-red-500/20 text-2xl shadow-lg shadow-red-500/30" style={{ left: en.x - 24, top: en.y - 24 }}>
-            {en.icon}
-          </div>
-        ))}
-
-        {/* Bullets */}
-        {bullets.map((b) => {
-          const x = b.x + (b.tx - b.x) * b.progress;
-          const y = b.y + (b.ty - b.y) * b.progress;
-          return (
-            <div key={b.id} className="pointer-events-none absolute h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,1)]" style={{ left: x - 4, top: y - 4 }} />
-          );
-        })}
-
-        {/* Crosshair at cursor */}
-        {playing && (
-          <div className="pointer-events-none absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-cyan-300/70" style={{ left: crosshairPos.x, top: crosshairPos.y }}>
-            <div className="absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300" />
-          </div>
-        )}
-
-        {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-6 text-center">
-            {gameOver ? (
-              <>
-                <p className="text-5xl">🚀</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">{health > 0 ? "Mission Complete!" : "Server Down!"}</h4>
-                <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
-                <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
-              </>
-            ) : (
-              <>
-                <p className="text-5xl">🚀</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Space Defender</h4>
-                <p className="mt-3 max-w-md text-sm text-slate-300">
-                  You are the <strong className="text-cyan-300">server turret</strong>. Hacker bots 👾🦠💀 are invading.<br />
-                  <strong>Move your mouse</strong> to aim, <strong>click</strong> to shoot.<br />
-                  Don't let them reach your server!
-                </p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
-              </>
-            )}
-          </div>
-        )}
       </div>
-    </div>
+    </GameShell>
   );
 }
 
 // ============================================
-// NEW GAME 5 — CYBER SNAKE
+// GAME 5 — CYBER SNAKE (adaptive cell size)
 // ============================================
 function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
-  const CELL = 28;
   const COLS = 20;
   const ROWS = 15;
+  const [cellSize, setCellSize] = useState(28);
+
+  useEffect(() => {
+    const updateCell = () => {
+      const w = window.innerWidth;
+      if (w < 400) setCellSize(14);
+      else if (w < 640) setCellSize(18);
+      else if (w < 900) setCellSize(22);
+      else setCellSize(28);
+    };
+    updateCell();
+    window.addEventListener("resize", updateCell);
+    return () => window.removeEventListener("resize", updateCell);
+  }, []);
+
+  const CELL = cellSize;
 
   const [playing, setPlaying] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -1470,7 +1373,6 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
     }
     if (free.length === 0) return;
     const cell = free[Math.floor(Math.random() * free.length)];
-    // 75% data (good), 25% virus (bad)
     foodRef.current = { ...cell, type: Math.random() < 0.75 ? "data" : "virus" };
     setFood(foodRef.current);
   }, []);
@@ -1484,7 +1386,6 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
     setPaused(false);
   };
 
-  // Keyboard
   useEffect(() => {
     const kd = (e) => {
       const k = e.key.toLowerCase();
@@ -1493,13 +1394,12 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
       else if ((k === "arrowdown" || k === "s") && cur.y === 0) dirRef.current = { x: 0, y: 1 };
       else if ((k === "arrowleft" || k === "a") && cur.x === 0) dirRef.current = { x: -1, y: 0 };
       else if ((k === "arrowright" || k === "d") && cur.x === 0) dirRef.current = { x: 1, y: 0 };
-      if (["arrowup","arrowdown","arrowleft","arrowright"," "].includes(e.key.toLowerCase())) e.preventDefault();
+      if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(e.key.toLowerCase())) e.preventDefault();
     };
     window.addEventListener("keydown", kd);
     return () => window.removeEventListener("keydown", kd);
   }, []);
 
-  // Touch controls
   const touchRef = useRef({ x: 0, y: 0 });
   const onTouchStart = (e) => {
     const t = e.touches[0];
@@ -1521,7 +1421,6 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
     touchRef.current = { x: t.clientX, y: t.clientY };
   };
 
-  // Game loop
   useEffect(() => {
     if (!playing || paused) return;
     const tickInterval = Math.max(80, 160 - Math.floor(score / 20) * 10);
@@ -1530,13 +1429,11 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
       const head = snakeRef.current[0];
       const newHead = { x: head.x + cur.x, y: head.y + cur.y };
 
-      // Wall collision
       if (newHead.x < 0 || newHead.x >= COLS || newHead.y < 0 || newHead.y >= ROWS) {
         setPlaying(false); setGameOver(true); setStreak(0);
         showToast("💥 Hit the wall!", "error");
         return;
       }
-      // Self collision
       if (snakeRef.current.some((s) => s.x === newHead.x && s.y === newHead.y)) {
         setPlaying(false); setGameOver(true); setStreak(0);
         showToast("💥 Bit yourself!", "error");
@@ -1552,7 +1449,6 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
           newSnake = [newHead, ...snakeRef.current];
           burstConfetti(window.innerWidth / 2, window.innerHeight / 2);
         } else {
-          // Virus — shrink snake
           showToast("🦠 Virus! Snake shrunk", "error");
           newSnake = [newHead, ...snakeRef.current.slice(0, Math.max(1, snakeRef.current.length - 2))];
           setStreak(0);
@@ -1572,79 +1468,73 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   useEffect(() => { if (gameOver) { updateBest(score); setBestLocal((b) => Math.max(b, score)); } }, [gameOver]);
 
   return (
-    <div className="mx-auto max-w-3xl">
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-2xl font-bold">🐍 Cyber Snake</h3>
+    <div className="mx-auto w-full max-w-3xl">
+      <div className="mb-4 flex items-center justify-between gap-2 sm:mb-6">
+        <h3 className="text-lg font-bold sm:text-2xl">🐍 Cyber Snake</h3>
         <div className="flex gap-2">
-          {playing && <button onClick={() => setPaused((p) => !p)} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white"><Pause size={14} className="inline" /> {paused ? "Resume" : "Pause"}</button>}
-          <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white">← Back</button>
+          {playing && <button onClick={() => setPaused((p) => !p)} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm"><Pause size={13} className="inline" /> {paused ? "Resume" : "Pause"}</button>}
+          <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:text-sm">← Back</button>
         </div>
       </div>
 
-      <div className="mb-4 grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-emerald-300">Score</p><p className="text-xl font-extrabold text-white">{score}</p></div>
-        <div className="rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-cyan-300">Length</p><p className="text-xl font-extrabold text-white">{snake.length}</p></div>
-        <div className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-amber-300">Best</p><p className="text-xl font-extrabold text-white">{bestLocal}</p></div>
-      </div>
+      <GameHud
+        items={[
+          { label: "Score", value: score, color: "border-emerald-400/30 bg-emerald-400/10" },
+          { label: "Length", value: snake.length, color: "border-cyan-400/30 bg-cyan-400/10" },
+          { label: "Best", value: bestLocal, color: "border-amber-400/30 bg-amber-400/10" },
+        ]}
+      />
 
-      <div
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        className="relative mx-auto overflow-hidden rounded-2xl border-2 border-white/10 bg-[#030712] touch-none"
-        style={{ width: COLS * CELL, height: ROWS * CELL, maxWidth: "100%" }}
-      >
-        {/* Grid background */}
-        <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: `${CELL}px ${CELL}px` }} />
-
-        {/* Food */}
+      <div className="flex justify-center">
         <div
-          className={`absolute flex items-center justify-center text-lg ${food.type === "data" ? "text-emerald-400" : "text-red-400"}`}
-          style={{ left: food.x * CELL, top: food.y * CELL, width: CELL, height: CELL }}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          className="relative overflow-hidden rounded-2xl border-2 border-white/10 bg-[#030712] touch-none"
+          style={{ width: COLS * CELL, height: ROWS * CELL, maxWidth: "100%" }}
         >
-          {food.type === "data" ? "📦" : "🦠"}
-        </div>
+          <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: `${CELL}px ${CELL}px` }} />
 
-        {/* Snake */}
-        {snake.map((s, i) => (
-          <div
-            key={i}
-            className={`absolute rounded ${i === 0 ? "bg-cyan-400 shadow-lg shadow-cyan-500/50" : "bg-cyan-500/60"}`}
-            style={{ left: s.x * CELL + 1, top: s.y * CELL + 1, width: CELL - 2, height: CELL - 2 }}
-          />
-        ))}
-
-        {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-4 text-center">
-            {gameOver ? (
-              <>
-                <p className="text-5xl">🐍</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Game Over</h4>
-                <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
-                <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
-              </>
-            ) : (
-              <>
-                <p className="text-5xl">🐍</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Cyber Snake</h4>
-                <p className="mt-3 max-w-xs text-sm text-slate-300">
-                  Eat <strong className="text-emerald-300">📦 data packets</strong> to grow.<br />
-                  Avoid <strong className="text-red-300">🦠 viruses</strong> and walls.<br />
-                  <strong>Desktop:</strong> Arrow keys / WASD<br />
-                  <strong>Mobile:</strong> Swipe to turn
-                </p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
-              </>
-            )}
+          <div className={`absolute flex items-center justify-center ${food.type === "data" ? "text-emerald-400" : "text-red-400"}`} style={{ left: food.x * CELL, top: food.y * CELL, width: CELL, height: CELL, fontSize: CELL * 0.7 }}>
+            {food.type === "data" ? "📦" : "🦠"}
           </div>
-        )}
+
+          {snake.map((s, i) => (
+            <div key={i} className={`absolute rounded ${i === 0 ? "bg-cyan-400 shadow-lg shadow-cyan-500/50" : "bg-cyan-500/60"}`} style={{ left: s.x * CELL + 1, top: s.y * CELL + 1, width: CELL - 2, height: CELL - 2 }} />
+          ))}
+
+          {!playing && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-4 text-center">
+              {gameOver ? (
+                <>
+                  <p className="text-4xl sm:text-5xl">🐍</p>
+                  <h4 className="mt-3 text-2xl font-extrabold text-white sm:mt-4 sm:text-3xl">Game Over</h4>
+                  <p className="mt-2 text-base text-slate-300 sm:text-lg">Score: <strong className="text-cyan-400">{score}</strong></p>
+                  <p className="mt-1 text-xs text-slate-500 sm:text-sm">Best: {Math.max(bestLocal, score)}</p>
+                  <button onClick={start} className="mt-5 flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-6 sm:py-3"><RotateCcw size={15} /> Play Again</button>
+                </>
+              ) : (
+                <>
+                  <p className="text-4xl sm:text-5xl">🐍</p>
+                  <h4 className="mt-3 text-2xl font-extrabold text-white sm:mt-4 sm:text-3xl">Cyber Snake</h4>
+                  <p className="mt-3 max-w-xs text-xs text-slate-300 sm:text-sm">
+                    Eat <strong className="text-emerald-300">📦 data packets</strong> to grow.<br />
+                    Avoid <strong className="text-red-300">🦠 viruses</strong> and walls.<br />
+                    <strong>Desktop:</strong> Arrow keys / WASD<br />
+                    <strong>Mobile:</strong> Swipe to turn
+                  </p>
+                  <button onClick={start} className="mt-5 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-8 sm:py-3"><Play size={15} /> START</button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
 // ============================================
-// NEW GAME 6 — VIRUS BLASTER
+// GAME 6 — VIRUS BLASTER
 // ============================================
 function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const AREA_W = 700;
@@ -1674,7 +1564,6 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
 
   const clickVirus = (v, e) => {
     if (!playing) return;
-    // Explosion
     const id = ++idRef.current;
     setExplosions((ex) => [...ex, { id, x: v.x, y: v.y, born: performance.now() }]);
     setViruses((prev) => prev.filter((x) => x.id !== v.id));
@@ -1692,24 +1581,13 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
       const dt = Math.min(0.05, (t - lastTRef.current) / 1000);
       lastTRef.current = t;
 
-      // Spawn
       if (t - lastSpawnRef.current > Math.max(250, 600 - score * 3)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const icons = ["🦠", "👾", "💀", "🎣", "⚠️", "🧬"];
-        setViruses((prev) => [...prev, {
-          id,
-          x: 40 + Math.random() * (AREA_W - 80),
-          y: -30,
-          vy: 60 + Math.random() * 80,
-          vx: (Math.random() - 0.5) * 40,
-          points: 10,
-          icon: icons[Math.floor(Math.random() * icons.length)],
-          size: 40 + Math.random() * 20,
-        }]);
+        setViruses((prev) => [...prev, { id, x: 40 + Math.random() * (AREA_W - 80), y: -30, vy: 60 + Math.random() * 80, vx: (Math.random() - 0.5) * 40, points: 10, icon: icons[Math.floor(Math.random() * icons.length)], size: 40 + Math.random() * 20 }]);
       }
 
-      // Move
       setViruses((prev) => {
         const next = [];
         let miss = 0;
@@ -1727,7 +1605,6 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
         return next;
       });
 
-      // Explosions cleanup
       setExplosions((prev) => prev.filter((e) => t - e.born < 500));
 
       setTimeLeft((tl) => { if (tl <= 0.05) { setPlaying(false); setGameOver(true); return 0; } return tl - dt; });
@@ -1740,80 +1617,63 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
   useEffect(() => { if (gameOver) { updateBest(score); setBestLocal((b) => Math.max(b, score)); } }, [gameOver]);
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-2xl font-bold">🎯 Virus Blaster</h3>
-        <button onClick={onExit} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white">← Back</button>
+    <GameShell title="🎯 Virus Blaster" onExit={onExit}>
+      <GameHud
+        items={[
+          { label: "Time", value: `${Math.ceil(timeLeft)}s`, color: "border-cyan-400/30 bg-cyan-400/10" },
+          { label: "Score", value: score, color: "border-emerald-400/30 bg-emerald-400/10" },
+          { label: "Missed", value: misses, color: "border-red-400/30 bg-red-400/10" },
+          { label: "Best", value: bestLocal, color: "border-amber-400/30 bg-amber-400/10" },
+        ]}
+      />
+
+      <div className="overflow-x-auto pb-2">
+        <div
+          ref={containerRef}
+          className="relative overflow-hidden rounded-2xl border-2 border-white/10 cursor-crosshair"
+          style={{ width: AREA_W, minWidth: AREA_W, height: AREA_H, background: "radial-gradient(ellipse at top, #1a0a2e, #030712 60%)" }}
+        >
+          <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(rgba(168,85,247,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+
+          <div className="absolute bottom-0 left-0 right-0 h-10 border-t-2 border-cyan-400/50 bg-gradient-to-t from-cyan-400/20 to-transparent" />
+          <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-300">🖥️ Your Server</p>
+
+          {viruses.map((v) => (
+            <button key={v.id} onClick={(e) => clickVirus(v, e)} className="absolute flex items-center justify-center rounded-full border-2 border-red-400/60 bg-red-500/20 shadow-lg shadow-red-500/40 transition hover:scale-110" style={{ left: v.x - v.size / 2, top: v.y - v.size / 2, width: v.size, height: v.size, fontSize: v.size * 0.5 }}>
+              {v.icon}
+            </button>
+          ))}
+
+          {explosions.map((ex) => (
+            <div key={ex.id} className="pointer-events-none absolute animate-pop rounded-full border-2 border-amber-400 bg-amber-400/40" style={{ left: ex.x - 30, top: ex.y - 30, width: 60, height: 60, boxShadow: "0 0 30px rgba(251,191,36,0.8)" }} />
+          ))}
+
+          {!playing && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-6 text-center">
+              {gameOver ? (
+                <>
+                  <p className="text-5xl">🎯</p>
+                  <h4 className="mt-4 text-3xl font-extrabold text-white">Round Complete!</h4>
+                  <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
+                  <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
+                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
+                </>
+              ) : (
+                <>
+                  <p className="text-5xl">🎯</p>
+                  <h4 className="mt-4 text-3xl font-extrabold text-white">Virus Blaster</h4>
+                  <p className="mt-3 max-w-md text-sm text-slate-300">
+                    Viruses 🦠👾💀 fall from above. <strong className="text-cyan-300">Click them fast</strong> to destroy them<br />
+                    before they reach your server!
+                  </p>
+                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-
-      <div className="mb-4 grid grid-cols-4 gap-3">
-        <div className="rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-3 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-cyan-300">Time</p><p className="text-lg font-extrabold text-white">{Math.ceil(timeLeft)}s</p></div>
-        <div className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-emerald-300">Score</p><p className="text-lg font-extrabold text-white">{score}</p></div>
-        <div className="rounded-xl border border-red-400/30 bg-red-400/10 px-3 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-red-300">Missed</p><p className="text-lg font-extrabold text-white">{misses}</p></div>
-        <div className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-3 py-3 text-center"><p className="text-[10px] uppercase tracking-widest text-amber-300">Best</p><p className="text-lg font-extrabold text-white">{bestLocal}</p></div>
-      </div>
-
-      <div
-        ref={containerRef}
-        className="relative overflow-hidden rounded-2xl border-2 border-white/10 cursor-crosshair"
-        style={{ height: AREA_H, background: "radial-gradient(ellipse at top, #1a0a2e, #030712 60%)" }}
-      >
-        {/* Grid */}
-        <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(rgba(168,85,247,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
-
-        {/* Server at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-10 border-t-2 border-cyan-400/50 bg-gradient-to-t from-cyan-400/20 to-transparent" />
-        <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-300">🖥️ Your Server</p>
-
-        {/* Viruses */}
-        {viruses.map((v) => (
-          <button
-            key={v.id}
-            onClick={(e) => clickVirus(v, e)}
-            className="absolute flex items-center justify-center rounded-full border-2 border-red-400/60 bg-red-500/20 shadow-lg shadow-red-500/40 transition hover:scale-110"
-            style={{ left: v.x - v.size / 2, top: v.y - v.size / 2, width: v.size, height: v.size, fontSize: v.size * 0.5 }}
-          >
-            {v.icon}
-          </button>
-        ))}
-
-        {/* Explosions */}
-        {explosions.map((ex) => (
-          <div
-            key={ex.id}
-            className="pointer-events-none absolute animate-pop rounded-full border-2 border-amber-400 bg-amber-400/40"
-            style={{
-              left: ex.x - 30, top: ex.y - 30, width: 60, height: 60,
-              boxShadow: "0 0 30px rgba(251,191,36,0.8)",
-            }}
-          />
-        ))}
-
-        {!playing && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-6 text-center">
-            {gameOver ? (
-              <>
-                <p className="text-5xl">🎯</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Round Complete!</h4>
-                <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
-                <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
-              </>
-            ) : (
-              <>
-                <p className="text-5xl">🎯</p>
-                <h4 className="mt-4 text-3xl font-extrabold text-white">Virus Blaster</h4>
-                <p className="mt-3 max-w-md text-sm text-slate-300">
-                  Viruses 🦠👾💀 fall from above. <strong className="text-cyan-300">Click them fast</strong> to destroy them<br />
-                  before they reach your server!
-                </p>
-                <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
+    </GameShell>
   );
 }
 
