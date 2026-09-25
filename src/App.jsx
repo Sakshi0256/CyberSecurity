@@ -69,6 +69,34 @@ const realCases = [
   { id: "aadhaar", year: "2018", title: "Aadhaar Data Leak (India)", icon: "🆔", severity: "Critical", color: "red", summary: "Aadhaar data of 1.1 billion Indian citizens was reportedly accessible through a government portal.", impact: "Massive privacy breach affecting almost every Indian adult.", lesson: "Use Aadhaar Virtual ID and lock biometrics where possible.", link: "https://uidai.gov.in/", linkLabel: "UIDAI Official" },
 ];
 
+// ============================================
+// MOBILE-AWARE VIEWPORT HOOK
+// ============================================
+function useViewport() {
+  const [vp, setVp] = useState({ w: 0, h: 0 });
+  useEffect(() => {
+    const update = () => {
+      const w = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+      const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      setVp({ w, h });
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", update);
+    }
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", update);
+      }
+    };
+  }, []);
+  return vp;
+}
+
 const burstConfetti = (x, y) => {
   const colors = ["#00f0ff", "#a855f7", "#fbbf24", "#10b981", "#ef4444"];
   const root = document.getElementById("confetti-root");
@@ -626,7 +654,6 @@ function App() {
 function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBest }) {
   const [activeGame, setActiveGame] = useState(null);
   const [showRotateHint, setShowRotateHint] = useState(false);
-  const [isPortraitMobile, setIsPortraitMobile] = useState(false);
 
   const games = [
     { id: "link", icon: Link2, name: "Suspicious Link Catcher", desc: "Links fall. Click the BAD ones before they reach your inbox.", color: "red", tag: "Clicker" },
@@ -636,22 +663,6 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
     { id: "snake", icon: Zap, name: "Cyber Snake", desc: "Classic snake — eat data packets, avoid malware blocks. Don't hit walls!", color: "emerald", tag: "Classic" },
     { id: "blaster", icon: Target, name: "Virus Blaster", desc: "Click falling viruses to destroy them before they reach your server.", color: "blue", tag: "Reflex" },
   ];
-
-  // Track portrait/mobile state (no API calls)
-  useEffect(() => {
-    const check = () => {
-      const mobile = window.innerWidth < 768;
-      const portrait = window.innerHeight > window.innerWidth;
-      setIsPortraitMobile(mobile && portrait);
-    };
-    check();
-    window.addEventListener("resize", check);
-    window.addEventListener("orientationchange", check);
-    return () => {
-      window.removeEventListener("resize", check);
-      window.removeEventListener("orientationchange", check);
-    };
-  }, []);
 
   const handleGameStart = (gameId) => {
     setActiveGame(gameId);
@@ -706,7 +717,7 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
           </div>
         </div>
 
-       <div className="mt-8 grid gap-4 sm:mt-12 sm:gap-6 md:grid-cols-2 lg:grid-cols-2">
+        <div className="mt-8 grid gap-4 sm:mt-12 sm:gap-6 md:grid-cols-2">
           {games.map((g) => {
             const Icon = g.icon;
             const c = {
@@ -722,22 +733,22 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
               <button
                 key={g.id}
                 onClick={() => handleGameStart(g.id)}
-                className={`group relative overflow-hidden rounded-2xl border-2 ${c.border} ${c.bg} p-4 text-left transition-all duration-300 hover:-translate-y-1 sm:p-5`}
+                className={`group relative overflow-hidden rounded-2xl border-2 ${c.border} ${c.bg} p-4 text-left transition-all duration-300 hover:-translate-y-1 sm:rounded-3xl sm:p-6`}
               >
                 <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-white/5 blur-3xl" />
                 <div className="relative">
                   <div className="flex items-start justify-between">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] sm:h-12 sm:w-12 ${c.icon}`}>
-                      <Icon size={20} />
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] sm:h-14 sm:w-14 ${c.icon}`}>
+                      <Icon size={22} />
                     </div>
-                    <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${c.tag}`}>{g.tag}</span>
+                    <span className={`rounded-full px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest ${c.tag}`}>{g.tag}</span>
                   </div>
-                  <h3 className="mt-4 text-base font-bold text-white sm:text-lg">{g.name}</h3>
-                  <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-slate-400">{g.desc}</p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-slate-500">🏆 Best: {bestScores[g.id] || 0}</span>
-                    <span className="flex items-center gap-1.5 rounded-full bg-cyan-400 px-3 py-1.5 text-xs font-bold text-slate-950 transition group-hover:bg-cyan-300">
-                      <Play size={11} /> PLAY
+                  <h3 className="mt-4 text-lg font-bold text-white sm:mt-5 sm:text-xl">{g.name}</h3>
+                  <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-slate-400">{g.desc}</p>
+                  <div className="mt-4 flex items-center justify-between sm:mt-5">
+                    <span className="text-xs font-semibold text-slate-500">🏆 Best: {bestScores[g.id] || 0}</span>
+                    <span className="flex items-center gap-1.5 rounded-full bg-cyan-400 px-3 py-1.5 text-xs font-bold text-slate-950 transition group-hover:bg-cyan-300 sm:px-4 sm:py-2">
+                      <Play size={12} /> PLAY
                     </span>
                   </div>
                 </div>
@@ -749,7 +760,10 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
 
       {/* ===== FULLSCREEN GAME MODAL ===== */}
       {activeGame && (
-        <div className="fixed inset-0 z-[300] flex flex-col bg-[#030712]">
+        <div
+          className="fixed inset-0 z-[300] flex flex-col bg-[#030712]"
+          style={{ height: "100dvh" }}
+        >
           {/* Header */}
           <div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#0a1424] px-3 py-2.5 sm:px-6 sm:py-4">
             <h3 className="text-sm font-bold text-white sm:text-xl">
@@ -768,7 +782,7 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
             </button>
           </div>
 
-          {/* Rotate hint — shown when user opened in portrait on mobile, before playing */}
+          {/* Rotate hint */}
           {showRotateHint ? (
             <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
               <div className="mb-6 flex items-center justify-center gap-4">
@@ -791,8 +805,8 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
               </button>
             </div>
           ) : (
-            <div className="flex flex-1 overflow-auto">
-              <div className="flex w-full items-start justify-center p-2 sm:p-4 md:p-6">
+            <div className="flex flex-1 overflow-hidden">
+              <div className="flex w-full items-start justify-center overflow-auto p-2 sm:p-4 md:p-6">
                 {activeGame === "link" && <LinkCatcherGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.link} updateBest={(s) => updateBest("link", s)} onExit={handleGameClose} />}
                 {activeGame === "money" && <MoneyEscapeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.money} updateBest={(s) => updateBest("money", s)} onExit={handleGameClose} />}
                 {activeGame === "crack" && <CrackDefenseGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.crack} updateBest={(s) => updateBest("crack", s)} onExit={handleGameClose} />}
@@ -814,9 +828,9 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
 function GameShell({ title, onExit, children }) {
   return (
     <div className="mx-auto w-full max-w-4xl">
-      <div className="mb-3 flex items-center justify-between gap-2 sm:mb-4">
-        <h3 className="text-base font-bold sm:text-xl">{title}</h3>
-        <button onClick={onExit} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:py-2 sm:text-sm">← Back</button>
+      <div className="mb-2 flex items-center justify-between gap-2 sm:mb-4">
+        <h3 className="text-sm font-bold sm:text-xl">{title}</h3>
+        <button onClick={onExit} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-bold text-slate-400 hover:bg-white/[0.08] hover:text-white sm:px-4 sm:py-2 sm:text-sm">← Back</button>
       </div>
       {children}
     </div>
@@ -825,11 +839,11 @@ function GameShell({ title, onExit, children }) {
 
 function GameHud({ items }) {
   return (
-    <div className="mb-3 grid gap-2 sm:mb-4 sm:gap-3" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
+    <div className="mb-2 grid gap-1.5 sm:mb-4 sm:gap-3" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
       {items.map((it, i) => (
-        <div key={i} className={`rounded-xl border ${it.color} px-2 py-1.5 text-center sm:px-4 sm:py-3`}>
-          <p className="text-[9px] uppercase tracking-widest sm:text-[10px]">{it.label}</p>
-          <p className="text-sm font-extrabold text-white sm:text-xl">{it.value}</p>
+        <div key={i} className={`rounded-lg border ${it.color} px-1.5 py-1 text-center sm:rounded-xl sm:px-4 sm:py-3`}>
+          <p className="text-[8px] uppercase tracking-widest sm:text-[10px]">{it.label}</p>
+          <p className="text-xs font-extrabold text-white sm:text-xl">{it.value}</p>
         </div>
       ))}
     </div>
@@ -842,20 +856,17 @@ function GameHud({ items }) {
 function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const [dims, setDims] = useState({ w: 700, h: 480 });
   const GAME_DURATION = 45;
+  const { w: vpW, h: vpH } = useViewport();
 
   useEffect(() => {
-    const update = () => {
-      const maxW = Math.min(window.innerWidth - 24, 900);
-      const maxH = Math.min(window.innerHeight * 0.7, 480);
-      const ratio = 700 / 480;
-      let w = maxW, h = w / ratio;
-      if (h > maxH) { h = maxH; w = h * ratio; }
-      setDims({ w: Math.round(w), h: Math.round(h) });
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+    const reserve = 220;
+    const availW = Math.max(vpW - 24, 280);
+    const availH = Math.max(vpH - reserve, 220);
+    const ratio = 700 / 480;
+    let w = availW, h = w / ratio;
+    if (h > availH) { h = availH; w = h * ratio; }
+    setDims({ w: Math.round(w), h: Math.round(h) });
+  }, [vpW, vpH]);
 
   const AREA_W = dims.w;
   const AREA_H = dims.h;
@@ -978,20 +989,17 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
 // ============================================
 function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const [dims, setDims] = useState({ w: 700, h: 420 });
+  const { w: vpW, h: vpH } = useViewport();
 
   useEffect(() => {
-    const update = () => {
-      const maxW = Math.min(window.innerWidth - 24, 900);
-      const maxH = Math.min(window.innerHeight * 0.65, 420);
-      const ratio = 700 / 420;
-      let w = maxW, h = w / ratio;
-      if (h > maxH) { h = maxH; w = h * ratio; }
-      setDims({ w: Math.round(w), h: Math.round(h) });
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+    const reserve = 220;
+    const availW = Math.max(vpW - 24, 280);
+    const availH = Math.max(vpH - reserve, 220);
+    const ratio = 700 / 420;
+    let w = availW, h = w / ratio;
+    if (h > availH) { h = availH; w = h * ratio; }
+    setDims({ w: Math.round(w), h: Math.round(h) });
+  }, [vpW, vpH]);
 
   const AREA_W = dims.w;
   const AREA_H = dims.h;
@@ -1287,20 +1295,17 @@ function CrackDefenseGame({ setXp, setStreak, showToast, best, updateBest, onExi
 function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const [dims, setDims] = useState({ w: 700, h: 460 });
   const GAME_DURATION = 45;
+  const { w: vpW, h: vpH } = useViewport();
 
   useEffect(() => {
-    const update = () => {
-      const maxW = Math.min(window.innerWidth - 24, 900);
-      const maxH = Math.min(window.innerHeight * 0.65, 460);
-      const ratio = 700 / 460;
-      let w = maxW, h = w / ratio;
-      if (h > maxH) { h = maxH; w = h * ratio; }
-      setDims({ w: Math.round(w), h: Math.round(h) });
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+    const reserve = 220;
+    const availW = Math.max(vpW - 24, 280);
+    const availH = Math.max(vpH - reserve, 220);
+    const ratio = 700 / 460;
+    let w = availW, h = w / ratio;
+    if (h > availH) { h = availH; w = h * ratio; }
+    setDims({ w: Math.round(w), h: Math.round(h) });
+  }, [vpW, vpH]);
 
   const AREA_W = dims.w;
   const AREA_H = dims.h;
@@ -1483,19 +1488,17 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const COLS = 20;
   const ROWS = 15;
   const [cellSize, setCellSize] = useState(28);
+  const { w: vpW, h: vpH } = useViewport();
 
   useEffect(() => {
-    const updateCell = () => {
-      const w = window.innerWidth;
-      if (w < 400) setCellSize(14);
-      else if (w < 640) setCellSize(16);
-      else if (w < 900) setCellSize(22);
-      else setCellSize(28);
-    };
-    updateCell();
-    window.addEventListener("resize", updateCell);
-    return () => window.removeEventListener("resize", updateCell);
-  }, []);
+    if (!vpW || !vpH) return;
+    const availW = vpW - 32;
+    const availH = vpH - 260;
+    const cellW = Math.floor(availW / COLS);
+    const cellH = Math.floor(availH / ROWS);
+    const size = Math.max(14, Math.min(cellW, cellH, 32));
+    setCellSize(size);
+  }, [vpW, vpH]);
 
   const CELL = cellSize;
 
@@ -1685,20 +1688,17 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
 function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const [dims, setDims] = useState({ w: 700, h: 460 });
   const GAME_DURATION = 40;
+  const { w: vpW, h: vpH } = useViewport();
 
   useEffect(() => {
-    const update = () => {
-      const maxW = Math.min(window.innerWidth - 24, 900);
-      const maxH = Math.min(window.innerHeight * 0.65, 460);
-      const ratio = 700 / 460;
-      let w = maxW, h = w / ratio;
-      if (h > maxH) { h = maxH; w = h * ratio; }
-      setDims({ w: Math.round(w), h: Math.round(h) });
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+    const reserve = 200;
+    const availW = Math.max(vpW - 24, 280);
+    const availH = Math.max(vpH - reserve, 220);
+    const ratio = 700 / 460;
+    let w = availW, h = w / ratio;
+    if (h > availH) { h = availH; w = h * ratio; }
+    setDims({ w: Math.round(w), h: Math.round(h) });
+  }, [vpW, vpH]);
 
   const AREA_W = dims.w;
   const AREA_H = dims.h;
