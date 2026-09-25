@@ -138,6 +138,7 @@ function App() {
         .animate-pop { animation: pop 0.3s ease; }
         .animate-pulse-ring { animation: pulseRing 1.5s infinite; }
         .arcade-grid { background-image: linear-gradient(rgba(0,240,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.06) 1px, transparent 1px); background-size: 40px 40px; animation: gridScroll 6s linear infinite; }
+        html, body { overflow-x: hidden; max-width: 100vw; }
       `}</style>
 
       <div className="pointer-events-none fixed inset-0 -z-10">
@@ -624,6 +625,8 @@ function App() {
 // ============================================
 function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBest }) {
   const [activeGame, setActiveGame] = useState(null);
+  const [showRotateHint, setShowRotateHint] = useState(false);
+  const [isPortraitMobile, setIsPortraitMobile] = useState(false);
 
   const games = [
     { id: "link", icon: Link2, name: "Suspicious Link Catcher", desc: "Links fall. Click the BAD ones before they reach your inbox.", color: "red", tag: "Clicker" },
@@ -634,31 +637,36 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
     { id: "blaster", icon: Target, name: "Virus Blaster", desc: "Click falling viruses to destroy them before they reach your server.", color: "blue", tag: "Reflex" },
   ];
 
+  // Track portrait/mobile state (no API calls)
+  useEffect(() => {
+    const check = () => {
+      const mobile = window.innerWidth < 768;
+      const portrait = window.innerHeight > window.innerWidth;
+      setIsPortraitMobile(mobile && portrait);
+    };
+    check();
+    window.addEventListener("resize", check);
+    window.addEventListener("orientationchange", check);
+    return () => {
+      window.removeEventListener("resize", check);
+      window.removeEventListener("orientationchange", check);
+    };
+  }, []);
+
   const handleGameStart = (gameId) => {
     setActiveGame(gameId);
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
-      const el = document.documentElement;
-      if (el.requestFullscreen) {
-        el.requestFullscreen().catch(() => {});
-      }
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock("landscape").catch(() => {});
-      }
-    }
+    const mobile = window.innerWidth < 768;
+    const portrait = window.innerHeight > window.innerWidth;
+    setShowRotateHint(mobile && portrait);
+  };
+
+  const handleContinue = () => {
+    setShowRotateHint(false);
   };
 
   const handleGameClose = () => {
     setActiveGame(null);
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    }
-    if (screen.orientation && screen.orientation.unlock) {
-      try { screen.orientation.unlock(); } catch {}
-    }
-  };
-
-  const closeFullscreen = () => {
-    handleGameClose();
+    setShowRotateHint(false);
   };
 
   return (
@@ -753,52 +761,47 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
               {activeGame === "blaster" && "🎯 Virus Blaster"}
             </h3>
             <button
-              onClick={closeFullscreen}
+              onClick={handleGameClose}
               className="rounded-lg border border-white/20 bg-white/5 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-white/10 sm:px-4 sm:py-2 sm:text-sm"
             >
               ✕ Close
             </button>
           </div>
 
-          {/* Portrait mobile → rotate prompt */}
-          <div className="flex flex-1 flex-col items-center justify-center p-6 text-center md:hidden landscape:hidden">
-            <div className="mb-6 flex items-center justify-center gap-4">
-              <div className="flex h-20 w-12 flex-col items-center justify-between rounded-lg border-2 border-cyan-400 p-1.5">
-                <div className="h-1 w-5 rounded-full bg-cyan-400" />
-                <div className="h-1 w-5 rounded-full bg-cyan-400" />
-                <div className="h-1 w-5 rounded-full bg-cyan-400" />
+          {/* Rotate hint — shown when user opened in portrait on mobile, before playing */}
+          {showRotateHint ? (
+            <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
+              <div className="mb-6 flex items-center justify-center gap-4">
+                <div className="flex h-20 w-12 flex-col items-center justify-between rounded-lg border-2 border-cyan-400 p-1.5">
+                  <div className="h-1 w-5 rounded-full bg-cyan-400" />
+                  <div className="h-1 w-5 rounded-full bg-cyan-400" />
+                  <div className="h-1 w-5 rounded-full bg-cyan-400" />
+                </div>
+                <Rotate3d className="animate-pulse text-cyan-400" size={40} />
               </div>
-              <Rotate3d className="animate-pulse text-cyan-400" size={40} />
+              <h4 className="text-xl font-bold text-white">Rotate your phone</h4>
+              <p className="mt-3 max-w-xs text-sm text-slate-400">
+                Turn your phone sideways (landscape) for the best gaming experience
+              </p>
+              <button
+                onClick={handleContinue}
+                className="mt-6 rounded-xl bg-cyan-400 px-6 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-300"
+              >
+                Continue anyway
+              </button>
             </div>
-            <h4 className="text-xl font-bold text-white">Rotate your phone</h4>
-            <p className="mt-3 max-w-xs text-sm text-slate-400">
-              Turn your phone sideways (landscape) for the best gaming experience
-            </p>
-            <button
-              onClick={() => {
-                const el = document.documentElement;
-                if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
-                if (screen.orientation && screen.orientation.lock) {
-                  screen.orientation.lock("landscape").catch(() => {});
-                }
-              }}
-              className="mt-6 rounded-xl bg-cyan-400 px-6 py-3 text-sm font-bold text-slate-950"
-            >
-              Continue in landscape
-            </button>
-          </div>
-
-          {/* Game area — landscape mobile OR desktop */}
-          <div className="hidden flex-1 overflow-auto landscape:flex md:flex">
-            <div className="flex w-full items-start justify-center p-2 sm:p-4 md:p-6">
-              {activeGame === "link" && <LinkCatcherGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.link} updateBest={(s) => updateBest("link", s)} onExit={closeFullscreen} />}
-              {activeGame === "money" && <MoneyEscapeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.money} updateBest={(s) => updateBest("money", s)} onExit={closeFullscreen} />}
-              {activeGame === "crack" && <CrackDefenseGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.crack} updateBest={(s) => updateBest("crack", s)} onExit={closeFullscreen} />}
-              {activeGame === "space" && <SpaceDefenderGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.space} updateBest={(s) => updateBest("space", s)} onExit={closeFullscreen} />}
-              {activeGame === "snake" && <SnakeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.snake} updateBest={(s) => updateBest("snake", s)} onExit={closeFullscreen} />}
-              {activeGame === "blaster" && <VirusBlasterGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.blaster} updateBest={(s) => updateBest("blaster", s)} onExit={closeFullscreen} />}
+          ) : (
+            <div className="flex flex-1 overflow-auto">
+              <div className="flex w-full items-start justify-center p-2 sm:p-4 md:p-6">
+                {activeGame === "link" && <LinkCatcherGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.link} updateBest={(s) => updateBest("link", s)} onExit={handleGameClose} />}
+                {activeGame === "money" && <MoneyEscapeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.money} updateBest={(s) => updateBest("money", s)} onExit={handleGameClose} />}
+                {activeGame === "crack" && <CrackDefenseGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.crack} updateBest={(s) => updateBest("crack", s)} onExit={handleGameClose} />}
+                {activeGame === "space" && <SpaceDefenderGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.space} updateBest={(s) => updateBest("space", s)} onExit={handleGameClose} />}
+                {activeGame === "snake" && <SnakeGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.snake} updateBest={(s) => updateBest("snake", s)} onExit={handleGameClose} />}
+                {activeGame === "blaster" && <VirusBlasterGame setXp={setXp} setStreak={setStreak} showToast={showToast} best={bestScores.blaster} updateBest={(s) => updateBest("blaster", s)} onExit={handleGameClose} />}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </section>
@@ -822,7 +825,7 @@ function GameShell({ title, onExit, children }) {
 
 function GameHud({ items }) {
   return (
-    <div className={`mb-3 grid gap-2 sm:mb-4 sm:gap-3`} style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
+    <div className="mb-3 grid gap-2 sm:mb-4 sm:gap-3" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
       {items.map((it, i) => (
         <div key={i} className={`rounded-xl border ${it.color} px-2 py-1.5 text-center sm:px-4 sm:py-3`}>
           <p className="text-[9px] uppercase tracking-widest sm:text-[10px]">{it.label}</p>
@@ -899,7 +902,7 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
         }
         return next;
       });
-    }, 33);
+    }, 40);
     tickRef.current = setInterval(() => {
       setTimeLeft((t) => { if (t <= 1) { setPlaying(false); setGameOver(true); return 0; } return t - 1; });
     }, 1000);
@@ -1041,7 +1044,7 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
     const step = (t) => {
       const dt = Math.min(0.05, (t - lastT) / 1000);
       lastT = t;
-      const minFrame = window.innerWidth < 768 ? 28 : 16;
+      const minFrame = window.innerWidth < 768 ? 33 : 20;
       if (t - lastRender < minFrame) { rafRef.current = requestAnimationFrame(step); return; }
       lastRender = t;
 
@@ -1056,7 +1059,7 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
         if (k["arrowdown"] || k["s"]) ny += speed * dt;
         return { x: Math.max(0, Math.min(w - PLAYER_SIZE, nx)), y: Math.max(0, Math.min(h - PLAYER_SIZE, ny)) };
       });
-      if (t - lastSpawnRef.current > Math.max(350, 750 - score * 5)) {
+      if (t - lastSpawnRef.current > Math.max(400, 850 - score * 5)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const x = Math.random() * (w - SCAM_SIZE);
@@ -1178,9 +1181,13 @@ function CrackDefenseGame({ setXp, setStreak, showToast, best, updateBest, onExi
   useEffect(() => {
     if (!playing) return;
     lastTRef.current = performance.now();
+    let lastRender = 0;
     const step = (t) => {
       const dt = Math.min(0.05, (t - lastTRef.current) / 1000);
       lastTRef.current = t;
+      const minFrame = window.innerWidth < 768 ? 33 : 20;
+      if (t - lastRender < minFrame) { rafRef.current = requestAnimationFrame(step); return; }
+      lastRender = t;
       markerRef.current += SPEED * dt * dirRef.current;
       if (markerRef.current >= 100) { markerRef.current = 100; dirRef.current = -1; }
       if (markerRef.current <= 0) { markerRef.current = 0; dirRef.current = 1; }
@@ -1305,7 +1312,6 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
   const [health, setHealth] = useState(100);
   const [enemies, setEnemies] = useState([]);
   const [bullets, setBullets] = useState([]);
-  const [aim, setAim] = useState({ x: AREA_W / 2, y: AREA_H / 2 });
   const [bestLocal, setBestLocal] = useState(best || 0);
 
   const containerRef = useRef(null);
@@ -1322,21 +1328,12 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
     lastSpawnRef.current = 0;
   };
 
-  const onPointerMove = (e) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setAim({ x, y });
-  };
-
   const shoot = (e) => {
-    if (!playing) return;
+    if (!playing || !containerRef.current) return;
     const { w, h } = dimsRef.current;
     const rect = containerRef.current.getBoundingClientRect();
     const tx = e.clientX - rect.left;
     const ty = e.clientY - rect.top;
-    setAim({ x: tx, y: ty });
     const id = ++idRef.current;
     setBullets((b) => [...b, { id, x: w / 2, y: h - 40, tx, ty, progress: 0 }]);
   };
@@ -1348,12 +1345,12 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
     const step = (t) => {
       const dt = Math.min(0.05, (t - lastTRef.current) / 1000);
       lastTRef.current = t;
-      const minFrame = window.innerWidth < 768 ? 28 : 16;
+      const minFrame = window.innerWidth < 768 ? 33 : 20;
       if (t - lastRender < minFrame) { rafRef.current = requestAnimationFrame(step); return; }
       lastRender = t;
       const { w, h } = dimsRef.current;
 
-      if (t - lastSpawnRef.current > Math.max(450, 1100 - score * 8)) {
+      if (t - lastSpawnRef.current > Math.max(500, 1200 - score * 8)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const icons = ["👾", "🦠", "💀", "🎣", "⚠️"];
@@ -1425,13 +1422,12 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
 
       <div
         ref={containerRef}
-        onPointerMove={onPointerMove}
         onClick={shoot}
         className={`relative mx-auto overflow-hidden rounded-2xl border-2 transition touch-none cursor-crosshair ${health < 40 ? "border-red-500" : "border-white/10"}`}
         style={{ width: AREA_W, height: AREA_H, background: "radial-gradient(ellipse at bottom, #0a1a2e, #030712 60%)", maxWidth: "100%" }}
       >
         <div className="pointer-events-none absolute inset-0">
-          {Array.from({ length: 15 }).map((_, i) => (
+          {Array.from({ length: 12 }).map((_, i) => (
             <div key={i} className="absolute rounded-full bg-white/40" style={{ left: `${(i * 73) % 100}%`, top: `${(i * 47) % 100}%`, width: 1 + (i % 3), height: 1 + (i % 3) }} />
           ))}
         </div>
@@ -1492,7 +1488,7 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
     const updateCell = () => {
       const w = window.innerWidth;
       if (w < 400) setCellSize(14);
-      else if (w < 640) setCellSize(18);
+      else if (w < 640) setCellSize(16);
       else if (w < 900) setCellSize(22);
       else setCellSize(28);
     };
@@ -1507,7 +1503,6 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [snake, setSnake] = useState([{ x: 10, y: 7 }]);
-  const [dir, setDir] = useState({ x: 1, y: 0 });
   const [food, setFood] = useState({ x: 15, y: 7, type: "data" });
   const [bestLocal, setBestLocal] = useState(best || 0);
   const [paused, setPaused] = useState(false);
@@ -1532,7 +1527,7 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
     const init = [{ x: 10, y: 7 }];
     setPlaying(true); setGameOver(false); setScore(0);
     setSnake(init); snakeRef.current = init;
-    setDir({ x: 1, y: 0 }); dirRef.current = { x: 1, y: 0 };
+    dirRef.current = { x: 1, y: 0 };
     foodRef.current = { x: 15, y: 7, type: "data" }; setFood(foodRef.current);
     setPaused(false);
   };
@@ -1574,7 +1569,7 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
 
   useEffect(() => {
     if (!playing || paused) return;
-    const tickInterval = Math.max(80, 160 - Math.floor(score / 20) * 10);
+    const tickInterval = Math.max(90, 180 - Math.floor(score / 20) * 10);
     tickRef.current = setInterval(() => {
       const cur = dirRef.current;
       const head = snakeRef.current[0];
@@ -1749,12 +1744,12 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
     const step = (t) => {
       const dt = Math.min(0.05, (t - lastTRef.current) / 1000);
       lastTRef.current = t;
-      const minFrame = window.innerWidth < 768 ? 28 : 16;
+      const minFrame = window.innerWidth < 768 ? 33 : 20;
       if (t - lastRender < minFrame) { rafRef.current = requestAnimationFrame(step); return; }
       lastRender = t;
       const { w, h } = dimsRef.current;
 
-      if (t - lastSpawnRef.current > Math.max(300, 650 - score * 3)) {
+      if (t - lastSpawnRef.current > Math.max(350, 750 - score * 3)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const icons = ["🦠", "👾", "💀", "🎣", "⚠️", "🧬"];
