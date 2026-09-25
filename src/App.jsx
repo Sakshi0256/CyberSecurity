@@ -706,7 +706,7 @@ function Arcade({ xp, setXp, streak, setStreak, showToast, bestScores, updateBes
           </div>
         </div>
 
-        <div className="mt-8 grid gap-3 sm:mt-12 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
+       <div className="mt-8 grid gap-4 sm:mt-12 sm:gap-6 md:grid-cols-2 lg:grid-cols-2">
           {games.map((g) => {
             const Icon = g.icon;
             const c = {
