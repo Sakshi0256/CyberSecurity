@@ -320,7 +320,7 @@ function App() {
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl">
               <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">Workshop Topics</p>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">Watch. Learn. Then Play.</h2>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">Play. Watch. & Learn.</h2>
               <p className="mt-5 leading-7 text-slate-400">Each topic includes a video lesson + article. Reinforce what you learn in the games.</p>
             </div>
             <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -764,9 +764,25 @@ function GameHud({ items }) {
 // GAME 1 — LINK CATCHER
 // ============================================
 function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
+  const [dims, setDims] = useState({ w: 700, h: 480 });
   const GAME_DURATION = 45;
-  const AREA_W = 700;
-  const AREA_H = 480;
+
+  useEffect(() => {
+    const update = () => {
+      const maxW = Math.min(window.innerWidth - 32, 700);
+      const maxH = Math.min(window.innerHeight * 0.55, 480);
+      const ratio = 700 / 480;
+      let w = maxW, h = w / ratio;
+      if (h > maxH) { h = maxH; w = h * ratio; }
+      setDims({ w: Math.round(w), h: Math.round(h) });
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const AREA_W = dims.w;
+  const AREA_H = dims.h;
 
   const [playing, setPlaying] = useState(false);
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
@@ -780,6 +796,8 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
   const idRef = useRef(0);
   const loopRef = useRef(null);
   const tickRef = useRef(null);
+  const areaHRef = useRef(AREA_H);
+  areaHRef.current = AREA_H;
 
   const goodLinks = ["google.com", "github.com", "wikipedia.org", "amazon.in", "linkedin.com"];
   const badLinks = ["bit.ly/win", "free-money.xyz", "insta-verify.me", "kyc-update.tk", "bank-login.co"];
@@ -788,7 +806,7 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
     const isBad = Math.random() < 0.65;
     const text = isBad ? badLinks[Math.floor(Math.random() * badLinks.length)] : goodLinks[Math.floor(Math.random() * goodLinks.length)];
     const id = ++idRef.current;
-    const x = Math.random() * (AREA_W - 140) + 20;
+    const x = Math.random() * (window.innerWidth - 140) + 20;
     setItems((prev) => [...prev, { id, x, y: -40, isBad, text, speed: 1.2 + Math.random() * 1.3 }]);
   }, []);
 
@@ -800,7 +818,7 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
         const next = [];
         for (const it of prev) {
           const newY = it.y + it.speed;
-          if (newY > AREA_H + 40) {
+          if (newY > areaHRef.current + 40) {
             if (it.isBad) { setLives((l) => l - 1); setFlash("bad"); setTimeout(() => setFlash(null), 200); }
           } else next.push({ ...it, y: newY });
         }
@@ -808,7 +826,7 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
       });
     }, 30);
     tickRef.current = setInterval(() => {
-      setTimeLeft((t) => { if (t <= 1) { clearInterval(tickRef.current); setPlaying(false); setGameOver(true); return 0; } return t - 1; });
+      setTimeLeft((t) => { if (t <= 1) { setPlaying(false); setGameOver(true); return 0; } return t - 1; });
     }, 1000);
     return () => { clearInterval(spawnInterval); clearInterval(loopRef.current); clearInterval(tickRef.current); };
   }, [playing, spawn]);
@@ -841,39 +859,37 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
           { label: "Lives", value: "❤️".repeat(Math.max(0, lives)), color: "border-red-400/30 bg-red-400/10" },
         ]}
       />
-      <div className="overflow-x-auto pb-2">
-        <div
-          className={`relative overflow-hidden rounded-2xl border-2 transition ${flash === "good" ? "border-emerald-400" : flash === "bad" ? "border-red-400" : "border-white/10"}`}
-          style={{ width: AREA_W, minWidth: AREA_W, height: AREA_H, background: "linear-gradient(to bottom, #07111f, #030712)" }}
-        >
-          <div className="absolute inset-x-0 bottom-0 h-16 border-t border-cyan-400/20 bg-cyan-400/5" />
-          <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-400/60">⬇ Your Inbox</p>
-          {items.map((it) => (
-            <button key={it.id} onClick={(e) => clickItem(it, e)} className={`absolute rounded-lg border-2 px-3 py-1.5 font-mono text-xs font-bold shadow-lg transition hover:scale-110 ${it.isBad ? "border-red-400/60 bg-red-500/20 text-red-200" : "border-emerald-400/60 bg-emerald-500/20 text-emerald-200"}`} style={{ left: it.x, top: it.y }}>
-              {it.isBad ? "🚨 " : "✅ "}{it.text}
-            </button>
-          ))}
-          {!playing && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm p-4 text-center">
-              {gameOver ? (
-                <>
-                  <p className="text-5xl">🎯</p>
-                  <h4 className="mt-4 text-3xl font-extrabold text-white">Game Over</h4>
-                  <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
-                  <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
-                </>
-              ) : (
-                <>
-                  <p className="text-5xl">🔗</p>
-                  <h4 className="mt-4 text-3xl font-extrabold text-white">Catch the Bad Links</h4>
-                  <p className="mt-3 max-w-md text-center text-sm text-slate-300">Click <strong className="text-red-300">RED (bad)</strong> links to block them.<br /><strong className="text-emerald-300">DON'T click GREEN (safe)</strong> links!</p>
-                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
-                </>
-              )}
-            </div>
-          )}
-        </div>
+      <div
+        className={`relative mx-auto overflow-hidden rounded-2xl border-2 transition ${flash === "good" ? "border-emerald-400" : flash === "bad" ? "border-red-400" : "border-white/10"}`}
+        style={{ width: AREA_W, height: AREA_H, background: "linear-gradient(to bottom, #07111f, #030712)", maxWidth: "100%" }}
+      >
+        <div className="absolute inset-x-0 bottom-0 h-16 border-t border-cyan-400/20 bg-cyan-400/5" />
+        <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-400/60">⬇ Your Inbox</p>
+        {items.map((it) => (
+          <button key={it.id} onClick={(e) => clickItem(it, e)} className={`absolute rounded-lg border-2 px-2 py-1 font-mono text-[10px] font-bold shadow-lg transition sm:px-3 sm:py-1.5 sm:text-xs ${it.isBad ? "border-red-400/60 bg-red-500/20 text-red-200" : "border-emerald-400/60 bg-emerald-500/20 text-emerald-200"}`} style={{ left: Math.min(it.x, AREA_W - 100), top: it.y }}>
+            {it.isBad ? "🚨 " : "✅ "}{it.text}
+          </button>
+        ))}
+        {!playing && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm p-3 text-center">
+            {gameOver ? (
+              <>
+                <p className="text-3xl sm:text-5xl">🎯</p>
+                <h4 className="mt-2 text-xl font-extrabold text-white sm:mt-4 sm:text-3xl">Game Over</h4>
+                <p className="mt-1 text-sm text-slate-300 sm:mt-2 sm:text-lg">Score: <strong className="text-cyan-400">{score}</strong></p>
+                <p className="mt-1 text-xs text-slate-500 sm:text-sm">Best: {Math.max(bestLocal, score)}</p>
+                <button onClick={start} className="mt-4 flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-6 sm:py-3"><RotateCcw size={14} /> Play Again</button>
+              </>
+            ) : (
+              <>
+                <p className="text-3xl sm:text-5xl">🔗</p>
+                <h4 className="mt-2 text-xl font-extrabold text-white sm:mt-4 sm:text-3xl">Catch the Bad Links</h4>
+                <p className="mt-2 max-w-xs text-xs text-slate-300 sm:mt-3 sm:max-w-md sm:text-sm">Click <strong className="text-red-300">RED (bad)</strong> links.<br /><strong className="text-emerald-300">DON'T click GREEN (safe)</strong>!</p>
+                <button onClick={start} className="mt-4 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-8 sm:py-3"><Play size={14} /> START</button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </GameShell>
   );
@@ -883,10 +899,26 @@ function LinkCatcherGame({ setXp, setStreak, showToast, best, updateBest, onExit
 // GAME 2 — MONEY ESCAPE
 // ============================================
 function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
-  const AREA_W = 700;
-  const AREA_H = 420;
-  const PLAYER_SIZE = 44;
-  const SCAM_SIZE = 38;
+  const [dims, setDims] = useState({ w: 700, h: 420 });
+
+  useEffect(() => {
+    const update = () => {
+      const maxW = Math.min(window.innerWidth - 32, 700);
+      const maxH = Math.min(window.innerHeight * 0.5, 420);
+      const ratio = 700 / 420;
+      let w = maxW, h = w / ratio;
+      if (h > maxH) { h = maxH; w = h * ratio; }
+      setDims({ w: Math.round(w), h: Math.round(h) });
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const AREA_W = dims.w;
+  const AREA_H = dims.h;
+  const PLAYER_SIZE = Math.max(32, Math.round(AREA_W * 0.06));
+  const SCAM_SIZE = Math.max(28, Math.round(AREA_W * 0.055));
 
   const [playing, setPlaying] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -903,9 +935,13 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
   const rafRef = useRef(null);
   const lastSpawnRef = useRef(0);
   const containerRef = useRef(null);
+  const playerRef = useRef(player);
+  const dimsRef = useRef(dims);
+  playerRef.current = player;
+  dimsRef.current = dims;
 
   useEffect(() => {
-    const down = (e) => { keysRef.current[e.key.toLowerCase()] = true; if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(e.key.toLowerCase())) e.preventDefault(); };
+    const down = (e) => { keysRef.current[e.key.toLowerCase()] = true; };
     const up = (e) => { keysRef.current[e.key.toLowerCase()] = false; };
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
@@ -917,7 +953,10 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
     const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    setPlayer((p) => ({ x: Math.max(0, Math.min(AREA_W - PLAYER_SIZE, x - PLAYER_SIZE / 2)), y: Math.max(0, Math.min(AREA_H - PLAYER_SIZE, y - PLAYER_SIZE / 2)) }));
+    setPlayer((p) => ({
+      x: Math.max(0, Math.min(dimsRef.current.w - PLAYER_SIZE, x - PLAYER_SIZE / 2)),
+      y: Math.max(0, Math.min(dimsRef.current.h - PLAYER_SIZE, y - PLAYER_SIZE / 2)),
+    }));
   };
 
   useEffect(() => {
@@ -927,6 +966,7 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
       const dt = Math.min(0.05, (t - lastT) / 1000);
       lastT = t;
       const speed = 320;
+      const { w, h } = dimsRef.current;
       setPlayer((p) => {
         let nx = p.x, ny = p.y;
         const k = keysRef.current;
@@ -934,22 +974,23 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
         if (k["arrowright"] || k["d"]) nx += speed * dt;
         if (k["arrowup"] || k["w"]) ny -= speed * dt;
         if (k["arrowdown"] || k["s"]) ny += speed * dt;
-        return { x: Math.max(0, Math.min(AREA_W - PLAYER_SIZE, nx)), y: Math.max(0, Math.min(AREA_H - PLAYER_SIZE, ny)) };
+        return { x: Math.max(0, Math.min(w - PLAYER_SIZE, nx)), y: Math.max(0, Math.min(h - PLAYER_SIZE, ny)) };
       });
       if (t - lastSpawnRef.current > Math.max(300, 700 - score * 5)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
-        const x = Math.random() * (AREA_W - SCAM_SIZE);
+        const x = Math.random() * (w - SCAM_SIZE);
         const labels = ["💀 Scam", "🎣 Phish", "📧 Spam", "💰 Trap", "🔓 Hack"];
         setScams((s) => [...s, { id, x, y: -SCAM_SIZE, vy: 180 + Math.random() * 120, label: labels[Math.floor(Math.random() * labels.length)] }]);
       }
       setScams((prev) => {
         const next = [];
+        const pl = playerRef.current;
         for (const s of prev) {
           const ny = s.y + s.vy * dt;
-          const hit = s.x + SCAM_SIZE > player.x && s.x < player.x + PLAYER_SIZE && ny + SCAM_SIZE > player.y && ny < player.y + PLAYER_SIZE;
+          const hit = s.x + SCAM_SIZE > pl.x && s.x < pl.x + PLAYER_SIZE && ny + SCAM_SIZE > pl.y && ny < pl.y + PLAYER_SIZE;
           if (hit) { setGameOver(true); setPlaying(false); setFlash(true); setStreak(0); showToast("💥 Hit by a scam!", "error"); return []; }
-          if (ny > AREA_H + SCAM_SIZE) { setScore((sc) => sc + 1); setXp((x) => x + 5); setStreak((st) => st + 1); }
+          if (ny > h + SCAM_SIZE) { setScore((sc) => sc + 1); setXp((x) => x + 5); setStreak((st) => st + 1); }
           else next.push({ ...s, y: ny });
         }
         return next;
@@ -959,11 +1000,15 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
     };
     rafRef.current = requestAnimationFrame(step);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [playing, paused, score, player, setXp, setStreak, showToast]);
+  }, [playing, paused, score, setXp, setStreak, showToast]);
 
   useEffect(() => { if (gameOver) { updateBest(score); setBestLocal((b) => Math.max(b, score)); } }, [gameOver]);
 
-  const start = () => { setPlaying(true); setGameOver(false); setScore(0); setTimeLeft(40); setScams([]); setPlayer({ x: AREA_W / 2 - PLAYER_SIZE / 2, y: AREA_H - PLAYER_SIZE - 10 }); setFlash(false); lastSpawnRef.current = 0; };
+  const start = () => {
+    setPlaying(true); setGameOver(false); setScore(0); setTimeLeft(40);
+    setScams([]); setPlayer({ x: AREA_W / 2 - PLAYER_SIZE / 2, y: AREA_H - PLAYER_SIZE - 10 });
+    setFlash(false); lastSpawnRef.current = 0;
+  };
 
   return (
     <div className="mx-auto w-full max-w-4xl">
@@ -981,34 +1026,46 @@ function MoneyEscapeGame({ setXp, setStreak, showToast, best, updateBest, onExit
           { label: "Best", value: bestLocal, color: "border-amber-400/30 bg-amber-400/10" },
         ]}
       />
-      <div className="overflow-x-auto pb-2">
-        <div ref={containerRef} onPointerMove={onPointerMove} onPointerDown={onPointerMove} className={`relative overflow-hidden rounded-2xl border-2 transition touch-none ${flash ? "border-red-500" : "border-white/10"}`} style={{ width: AREA_W, minWidth: AREA_W, height: AREA_H, background: "radial-gradient(circle at center, #07111f, #030712)", cursor: playing ? "none" : "default" }}>
-          <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
-          <div className="absolute flex items-center justify-center rounded-full border-2 border-amber-400 bg-gradient-to-br from-amber-300 to-amber-500 shadow-lg shadow-amber-500/50" style={{ width: PLAYER_SIZE, height: PLAYER_SIZE, left: player.x, top: player.y }}><span className="text-xl font-extrabold text-amber-900">₹</span></div>
-          {scams.map((s) => (
-            <div key={s.id} className="absolute flex items-center justify-center rounded-lg border-2 border-red-400/60 bg-red-500/20 text-[10px] font-bold text-red-100 shadow-lg shadow-red-500/20" style={{ width: SCAM_SIZE + 30, height: SCAM_SIZE, left: s.x, top: s.y }}>{s.label}</div>
-          ))}
-          {!playing && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/75 backdrop-blur-sm p-6 text-center">
-              {gameOver ? (
-                <>
-                  <p className="text-5xl">💥</p>
-                  <h4 className="mt-4 text-3xl font-extrabold text-white">{timeLeft > 0 ? "Hit a Scam!" : "Survived!"}</h4>
-                  <p className="mt-2 text-lg text-slate-300">Dodged: <strong className="text-cyan-400">{score}</strong></p>
-                  <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
-                </>
-              ) : (
-                <>
-                  <p className="text-5xl">💰</p>
-                  <h4 className="mt-4 text-3xl font-extrabold text-white">Money Escape</h4>
-                  <p className="mt-3 max-w-md text-sm text-slate-300">You're a <strong className="text-amber-300">₹ coin</strong>. Dodge the falling scams.<br /><strong>Desktop:</strong> Arrow keys / WASD<br /><strong>Mobile:</strong> Drag to move</p>
-                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
-                </>
-              )}
-            </div>
-          )}
+      <div
+        ref={containerRef}
+        onPointerMove={onPointerMove}
+        onPointerDown={onPointerMove}
+        className={`relative mx-auto overflow-hidden rounded-2xl border-2 transition touch-none ${flash ? "border-red-500" : "border-white/10"}`}
+        style={{ width: AREA_W, height: AREA_H, background: "radial-gradient(circle at center, #07111f, #030712)", cursor: playing ? "none" : "default", maxWidth: "100%" }}
+      >
+        <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(0,240,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+        <div className="absolute flex items-center justify-center rounded-full border-2 border-amber-400 bg-gradient-to-br from-amber-300 to-amber-500 shadow-lg shadow-amber-500/50" style={{ width: PLAYER_SIZE, height: PLAYER_SIZE, left: player.x, top: player.y }}>
+          <span className="font-extrabold text-amber-900" style={{ fontSize: PLAYER_SIZE * 0.5 }}>₹</span>
         </div>
+        {scams.map((s) => (
+          <div key={s.id} className="absolute flex items-center justify-center rounded-lg border-2 border-red-400/60 bg-red-500/20 text-[9px] font-bold text-red-100 shadow-lg shadow-red-500/20 sm:text-[10px]" style={{ width: SCAM_SIZE + 24, height: SCAM_SIZE, left: s.x, top: s.y }}>
+            {s.label}
+          </div>
+        ))}
+        {!playing && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/75 backdrop-blur-sm p-4 text-center">
+            {gameOver ? (
+              <>
+                <p className="text-3xl sm:text-5xl">💥</p>
+                <h4 className="mt-2 text-xl font-extrabold text-white sm:mt-4 sm:text-3xl">{timeLeft > 0 ? "Hit a Scam!" : "Survived!"}</h4>
+                <p className="mt-1 text-sm text-slate-300 sm:mt-2 sm:text-lg">Dodged: <strong className="text-cyan-400">{score}</strong></p>
+                <p className="mt-1 text-xs text-slate-500 sm:text-sm">Best: {Math.max(bestLocal, score)}</p>
+                <button onClick={start} className="mt-4 flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-6 sm:py-3"><RotateCcw size={14} /> Play Again</button>
+              </>
+            ) : (
+              <>
+                <p className="text-3xl sm:text-5xl">💰</p>
+                <h4 className="mt-2 text-xl font-extrabold text-white sm:mt-4 sm:text-3xl">Money Escape</h4>
+                <p className="mt-2 max-w-xs text-xs text-slate-300 sm:mt-3 sm:max-w-md sm:text-sm">
+                  Dodge the falling scams.<br />
+                  <strong>Desktop:</strong> Arrow keys / WASD<br />
+                  <strong>Mobile:</strong> Drag to move
+                </p>
+                <button onClick={start} className="mt-4 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-8 sm:py-3"><Play size={14} /> START</button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1141,9 +1198,25 @@ function CrackDefenseGame({ setXp, setStreak, showToast, best, updateBest, onExi
 // GAME 4 — SPACE DEFENDER
 // ============================================
 function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
-  const AREA_W = 700;
-  const AREA_H = 460;
+  const [dims, setDims] = useState({ w: 700, h: 460 });
   const GAME_DURATION = 45;
+
+  useEffect(() => {
+    const update = () => {
+      const maxW = Math.min(window.innerWidth - 32, 700);
+      const maxH = Math.min(window.innerHeight * 0.5, 460);
+      const ratio = 700 / 460;
+      let w = maxW, h = w / ratio;
+      if (h > maxH) { h = maxH; w = h * ratio; }
+      setDims({ w: Math.round(w), h: Math.round(h) });
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const AREA_W = dims.w;
+  const AREA_H = dims.h;
 
   const [playing, setPlaying] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -1153,7 +1226,6 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
   const [enemies, setEnemies] = useState([]);
   const [bullets, setBullets] = useState([]);
   const [aim, setAim] = useState({ x: AREA_W / 2, y: AREA_H / 2 });
-  const [crosshairPos, setCrosshairPos] = useState({ x: AREA_W / 2, y: AREA_H / 2 });
   const [bestLocal, setBestLocal] = useState(best || 0);
 
   const containerRef = useRef(null);
@@ -1161,7 +1233,8 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
   const lastTRef = useRef(0);
   const idRef = useRef(0);
   const lastSpawnRef = useRef(0);
-  const playerPos = { x: AREA_W / 2, y: AREA_H - 40 };
+  const dimsRef = useRef(dims);
+  dimsRef.current = dims;
 
   const start = () => {
     setPlaying(true); setGameOver(false); setTimeLeft(GAME_DURATION);
@@ -1175,13 +1248,13 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     setAim({ x, y });
-    setCrosshairPos({ x, y });
   };
 
   const shoot = () => {
     if (!playing) return;
+    const { w, h } = dimsRef.current;
     const id = ++idRef.current;
-    setBullets((b) => [...b, { id, x: playerPos.x, y: playerPos.y, tx: aim.x, ty: aim.y, progress: 0 }]);
+    setBullets((b) => [...b, { id, x: w / 2, y: h - 40, tx: aim.x, ty: aim.y, progress: 0 }]);
   };
 
   useEffect(() => {
@@ -1190,12 +1263,13 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
     const step = (t) => {
       const dt = Math.min(0.05, (t - lastTRef.current) / 1000);
       lastTRef.current = t;
+      const { w, h } = dimsRef.current;
 
       if (t - lastSpawnRef.current > Math.max(400, 1000 - score * 8)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const icons = ["👾", "🦠", "💀", "🎣", "⚠️"];
-        const x = 60 + Math.random() * (AREA_W - 120);
+        const x = 60 + Math.random() * (w - 120);
         setEnemies((e) => [...e, { id, x, y: -40, vy: 60 + Math.random() * 60, vx: (Math.random() - 0.5) * 80, icon: icons[Math.floor(Math.random() * icons.length)], points: 10 }]);
       }
 
@@ -1205,14 +1279,14 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
         for (const en of prev) {
           const nx = en.x + en.vx * dt;
           const ny = en.y + en.vy * dt;
-          const dx = nx - playerPos.x;
-          const dy = ny - playerPos.y;
+          const dx = nx - w / 2;
+          const dy = ny - (h - 40);
           if (Math.abs(dx) < 25 && Math.abs(dy) < 25) { dmg += 15; continue; }
-          if (ny > AREA_H + 40) continue;
+          if (ny > h + 40) continue;
           next.push({ ...en, x: nx, y: ny });
         }
         if (dmg > 0) {
-          setHealth((h) => { const nh = Math.max(0, h - dmg); if (nh <= 0) { setPlaying(false); setGameOver(true); } return nh; });
+          setHealth((hh) => { const nh = Math.max(0, hh - dmg); if (nh <= 0) { setPlaying(false); setGameOver(true); } return nh; });
           showToast(`💥 Server hit! -${dmg}%`, "error");
         }
         return next;
@@ -1261,68 +1335,58 @@ function SpaceDefenderGame({ setXp, setStreak, showToast, best, updateBest, onEx
         ]}
       />
 
-      <div className="overflow-x-auto pb-2">
-        <div
-          ref={containerRef}
-          onPointerMove={onPointerMove}
-          onClick={shoot}
-          className={`relative overflow-hidden rounded-2xl border-2 transition touch-none cursor-crosshair ${health < 40 ? "border-red-500" : "border-white/10"}`}
-          style={{ width: AREA_W, minWidth: AREA_W, height: AREA_H, background: "radial-gradient(ellipse at bottom, #0a1a2e, #030712 60%)" }}
-        >
-          <div className="pointer-events-none absolute inset-0">
-            {Array.from({ length: 40 }).map((_, i) => (
-              <div key={i} className="absolute rounded-full bg-white/40" style={{ left: `${(i * 73) % 100}%`, top: `${(i * 47) % 100}%`, width: 1 + (i % 3), height: 1 + (i % 3) }} />
-            ))}
-          </div>
-
-          <div className="absolute flex h-12 w-12 items-center justify-center rounded-full border-2 border-cyan-400 bg-cyan-400/20 shadow-lg shadow-cyan-500/40" style={{ left: playerPos.x - 24, top: playerPos.y - 24 }}>
-            <Crosshair className="text-cyan-300" size={20} />
-          </div>
-
-          <svg className="pointer-events-none absolute inset-0 h-full w-full">
-            <line x1={playerPos.x} y1={playerPos.y} x2={aim.x} y2={aim.y} stroke="rgba(34,211,238,0.4)" strokeWidth="1" strokeDasharray="4 6" />
-          </svg>
-
-          {enemies.map((en) => (
-            <div key={en.id} className="absolute flex h-12 w-12 items-center justify-center rounded-full border-2 border-red-400/60 bg-red-500/20 text-2xl shadow-lg shadow-red-500/30" style={{ left: en.x - 24, top: en.y - 24 }}>{en.icon}</div>
+      <div
+        ref={containerRef}
+        onPointerMove={onPointerMove}
+        onClick={shoot}
+        className={`relative mx-auto overflow-hidden rounded-2xl border-2 transition touch-none cursor-crosshair ${health < 40 ? "border-red-500" : "border-white/10"}`}
+        style={{ width: AREA_W, height: AREA_H, background: "radial-gradient(ellipse at bottom, #0a1a2e, #030712 60%)", maxWidth: "100%" }}
+      >
+        <div className="pointer-events-none absolute inset-0">
+          {Array.from({ length: 30 }).map((_, i) => (
+            <div key={i} className="absolute rounded-full bg-white/40" style={{ left: `${(i * 73) % 100}%`, top: `${(i * 47) % 100}%`, width: 1 + (i % 3), height: 1 + (i % 3) }} />
           ))}
-
-          {bullets.map((b) => {
-            const x = b.x + (b.tx - b.x) * b.progress;
-            const y = b.y + (b.ty - b.y) * b.progress;
-            return <div key={b.id} className="pointer-events-none absolute h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,1)]" style={{ left: x - 4, top: y - 4 }} />;
-          })}
-
-          {playing && (
-            <div className="pointer-events-none absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-cyan-300/70" style={{ left: crosshairPos.x, top: crosshairPos.y }}>
-              <div className="absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300" />
-            </div>
-          )}
-
-          {!playing && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-6 text-center">
-              {gameOver ? (
-                <>
-                  <p className="text-5xl">🚀</p>
-                  <h4 className="mt-4 text-3xl font-extrabold text-white">{health > 0 ? "Mission Complete!" : "Server Down!"}</h4>
-                  <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
-                  <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
-                </>
-              ) : (
-                <>
-                  <p className="text-5xl">🚀</p>
-                  <h4 className="mt-4 text-3xl font-extrabold text-white">Space Defender</h4>
-                  <p className="mt-3 max-w-md text-sm text-slate-300">
-                    You are the <strong className="text-cyan-300">server turret</strong>. Hacker bots 👾🦠💀 are invading.<br />
-                    <strong>Move your mouse</strong> to aim, <strong>click</strong> to shoot.
-                  </p>
-                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
-                </>
-              )}
-            </div>
-          )}
         </div>
+
+        <div className="absolute flex h-10 w-10 items-center justify-center rounded-full border-2 border-cyan-400 bg-cyan-400/20 shadow-lg shadow-cyan-500/40 sm:h-12 sm:w-12" style={{ left: AREA_W / 2 - 20, top: AREA_H - 60 }}>
+          <Crosshair className="text-cyan-300" size={18} />
+        </div>
+
+        {enemies.map((en) => (
+          <div key={en.id} className="absolute flex h-10 w-10 items-center justify-center rounded-full border-2 border-red-400/60 bg-red-500/20 text-xl shadow-lg shadow-red-500/30 sm:h-12 sm:w-12 sm:text-2xl" style={{ left: en.x - 20, top: en.y - 20 }}>
+            {en.icon}
+          </div>
+        ))}
+
+        {bullets.map((b) => {
+          const x = b.x + (b.tx - b.x) * b.progress;
+          const y = b.y + (b.ty - b.y) * b.progress;
+          return <div key={b.id} className="pointer-events-none absolute h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,1)]" style={{ left: x - 4, top: y - 4 }} />;
+        })}
+
+        {!playing && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-4 text-center">
+            {gameOver ? (
+              <>
+                <p className="text-3xl sm:text-5xl">🚀</p>
+                <h4 className="mt-2 text-xl font-extrabold text-white sm:mt-4 sm:text-3xl">{health > 0 ? "Mission Complete!" : "Server Down!"}</h4>
+                <p className="mt-1 text-sm text-slate-300 sm:mt-2 sm:text-lg">Score: <strong className="text-cyan-400">{score}</strong></p>
+                <p className="mt-1 text-xs text-slate-500 sm:text-sm">Best: {Math.max(bestLocal, score)}</p>
+                <button onClick={start} className="mt-4 flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-6 sm:py-3"><RotateCcw size={14} /> Play Again</button>
+              </>
+            ) : (
+              <>
+                <p className="text-3xl sm:text-5xl">🚀</p>
+                <h4 className="mt-2 text-xl font-extrabold text-white sm:mt-4 sm:text-3xl">Space Defender</h4>
+                <p className="mt-2 max-w-xs text-xs text-slate-300 sm:mt-3 sm:max-w-md sm:text-sm">
+                  Tap the sky to shoot hacker bots 👾🦠💀<br />
+                  before they reach your server!
+                </p>
+                <button onClick={start} className="mt-4 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-8 sm:py-3"><Play size={14} /> START</button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </GameShell>
   );
@@ -1536,9 +1600,25 @@ function SnakeGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
 // GAME 6 — VIRUS BLASTER
 // ============================================
 function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExit }) {
-  const AREA_W = 700;
-  const AREA_H = 460;
+  const [dims, setDims] = useState({ w: 700, h: 460 });
   const GAME_DURATION = 40;
+
+  useEffect(() => {
+    const update = () => {
+      const maxW = Math.min(window.innerWidth - 32, 700);
+      const maxH = Math.min(window.innerHeight * 0.5, 460);
+      const ratio = 700 / 460;
+      let w = maxW, h = w / ratio;
+      if (h > maxH) { h = maxH; w = h * ratio; }
+      setDims({ w: Math.round(w), h: Math.round(h) });
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const AREA_W = dims.w;
+  const AREA_H = dims.h;
 
   const [playing, setPlaying] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -1553,7 +1633,8 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
   const lastTRef = useRef(0);
   const idRef = useRef(0);
   const lastSpawnRef = useRef(0);
-  const containerRef = useRef(null);
+  const dimsRef = useRef(dims);
+  dimsRef.current = dims;
 
   const start = () => {
     setPlaying(true); setGameOver(false); setTimeLeft(GAME_DURATION);
@@ -1579,12 +1660,13 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
     const step = (t) => {
       const dt = Math.min(0.05, (t - lastTRef.current) / 1000);
       lastTRef.current = t;
+      const { w, h } = dimsRef.current;
 
       if (t - lastSpawnRef.current > Math.max(250, 600 - score * 3)) {
         lastSpawnRef.current = t;
         const id = ++idRef.current;
         const icons = ["🦠", "👾", "💀", "🎣", "⚠️", "🧬"];
-        setViruses((prev) => [...prev, { id, x: 40 + Math.random() * (AREA_W - 80), y: -30, vy: 60 + Math.random() * 80, vx: (Math.random() - 0.5) * 40, points: 10, icon: icons[Math.floor(Math.random() * icons.length)], size: 40 + Math.random() * 20 }]);
+        setViruses((prev) => [...prev, { id, x: 40 + Math.random() * (w - 80), y: -30, vy: 60 + Math.random() * 80, vx: (Math.random() - 0.5) * 40, points: 10, icon: icons[Math.floor(Math.random() * icons.length)], size: 40 + Math.random() * 20 }]);
       }
 
       setViruses((prev) => {
@@ -1593,7 +1675,7 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
         for (const v of prev) {
           const ny = v.y + v.vy * dt;
           const nx = v.x + v.vx * dt;
-          if (ny > AREA_H + 30) { miss++; continue; }
+          if (ny > h + 30) { miss++; continue; }
           next.push({ ...v, x: nx, y: ny });
         }
         if (miss > 0) {
@@ -1626,51 +1708,48 @@ function VirusBlasterGame({ setXp, setStreak, showToast, best, updateBest, onExi
         ]}
       />
 
-      <div className="overflow-x-auto pb-2">
-        <div
-          ref={containerRef}
-          className="relative overflow-hidden rounded-2xl border-2 border-white/10 cursor-crosshair"
-          style={{ width: AREA_W, minWidth: AREA_W, height: AREA_H, background: "radial-gradient(ellipse at top, #1a0a2e, #030712 60%)" }}
-        >
-          <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(rgba(168,85,247,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+      <div
+        className="relative mx-auto overflow-hidden rounded-2xl border-2 border-white/10 cursor-crosshair"
+        style={{ width: AREA_W, height: AREA_H, background: "radial-gradient(ellipse at top, #1a0a2e, #030712 60%)", maxWidth: "100%" }}
+      >
+        <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(rgba(168,85,247,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.15) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
 
-          <div className="absolute bottom-0 left-0 right-0 h-10 border-t-2 border-cyan-400/50 bg-gradient-to-t from-cyan-400/20 to-transparent" />
-          <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-300">🖥️ Your Server</p>
+        <div className="absolute bottom-0 left-0 right-0 h-10 border-t-2 border-cyan-400/50 bg-gradient-to-t from-cyan-400/20 to-transparent" />
+        <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-cyan-300">🖥️ Your Server</p>
 
-          {viruses.map((v) => (
-            <button key={v.id} onClick={(e) => clickVirus(v, e)} className="absolute flex items-center justify-center rounded-full border-2 border-red-400/60 bg-red-500/20 shadow-lg shadow-red-500/40 transition hover:scale-110" style={{ left: v.x - v.size / 2, top: v.y - v.size / 2, width: v.size, height: v.size, fontSize: v.size * 0.5 }}>
-              {v.icon}
-            </button>
-          ))}
+        {viruses.map((v) => (
+          <button key={v.id} onClick={(e) => clickVirus(v, e)} className="absolute flex items-center justify-center rounded-full border-2 border-red-400/60 bg-red-500/20 shadow-lg shadow-red-500/40 transition hover:scale-110" style={{ left: v.x - v.size / 2, top: v.y - v.size / 2, width: v.size, height: v.size, fontSize: v.size * 0.5 }}>
+            {v.icon}
+          </button>
+        ))}
 
-          {explosions.map((ex) => (
-            <div key={ex.id} className="pointer-events-none absolute animate-pop rounded-full border-2 border-amber-400 bg-amber-400/40" style={{ left: ex.x - 30, top: ex.y - 30, width: 60, height: 60, boxShadow: "0 0 30px rgba(251,191,36,0.8)" }} />
-          ))}
+        {explosions.map((ex) => (
+          <div key={ex.id} className="pointer-events-none absolute animate-pop rounded-full border-2 border-amber-400 bg-amber-400/40" style={{ left: ex.x - 30, top: ex.y - 30, width: 60, height: 60, boxShadow: "0 0 30px rgba(251,191,36,0.8)" }} />
+        ))}
 
-          {!playing && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-6 text-center">
-              {gameOver ? (
-                <>
-                  <p className="text-5xl">🎯</p>
-                  <h4 className="mt-4 text-3xl font-extrabold text-white">Round Complete!</h4>
-                  <p className="mt-2 text-lg text-slate-300">Score: <strong className="text-cyan-400">{score}</strong></p>
-                  <p className="mt-1 text-sm text-slate-500">Best: {Math.max(bestLocal, score)}</p>
-                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><RotateCcw size={16} /> Play Again</button>
-                </>
-              ) : (
-                <>
-                  <p className="text-5xl">🎯</p>
-                  <h4 className="mt-4 text-3xl font-extrabold text-white">Virus Blaster</h4>
-                  <p className="mt-3 max-w-md text-sm text-slate-300">
-                    Viruses 🦠👾💀 fall from above. <strong className="text-cyan-300">Click them fast</strong> to destroy them<br />
-                    before they reach your server!
-                  </p>
-                  <button onClick={start} className="mt-6 flex items-center gap-2 rounded-xl bg-cyan-400 px-8 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"><Play size={16} /> START</button>
-                </>
-              )}
-            </div>
-          )}
-        </div>
+        {!playing && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm p-4 text-center">
+            {gameOver ? (
+              <>
+                <p className="text-3xl sm:text-5xl">🎯</p>
+                <h4 className="mt-2 text-xl font-extrabold text-white sm:mt-4 sm:text-3xl">Round Complete!</h4>
+                <p className="mt-1 text-sm text-slate-300 sm:mt-2 sm:text-lg">Score: <strong className="text-cyan-400">{score}</strong></p>
+                <p className="mt-1 text-xs text-slate-500 sm:text-sm">Best: {Math.max(bestLocal, score)}</p>
+                <button onClick={start} className="mt-4 flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-6 sm:py-3"><RotateCcw size={14} /> Play Again</button>
+              </>
+            ) : (
+              <>
+                <p className="text-3xl sm:text-5xl">🎯</p>
+                <h4 className="mt-2 text-xl font-extrabold text-white sm:mt-4 sm:text-3xl">Virus Blaster</h4>
+                <p className="mt-2 max-w-xs text-xs text-slate-300 sm:mt-3 sm:max-w-md sm:text-sm">
+                  Tap falling viruses 🦠👾💀 to destroy them<br />
+                  before they reach your server!
+                </p>
+                <button onClick={start} className="mt-4 flex items-center gap-2 rounded-xl bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 sm:mt-6 sm:px-8 sm:py-3"><Play size={14} /> START</button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </GameShell>
   );
